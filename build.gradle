@@ -1,6 +1,4 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
 
 group 'io.beam.exp'
 version '1.0-SNAPSHOT'
@@ -11,6 +9,18 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    ext{
+        shadowjarVersion = '4.0.3'
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjarVersion"
+    }
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
@@ -19,5 +29,5 @@ ext{
     beamVersion = '2.15.0'
     slf4jVersion = '1.7.28'
     log4jVersion = '2.12.1'
-    shadowjarVersion = '4.0.3'
+
 }

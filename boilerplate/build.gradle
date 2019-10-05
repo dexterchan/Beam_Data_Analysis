@@ -1,16 +1,4 @@
-/*plugins {
-    id 'java'
-    id 'application'
-    id 'maven'
-}*/
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjarVersion"
-    }
-}
+
 
 apply plugin: 'application'
 apply plugin: 'java'
