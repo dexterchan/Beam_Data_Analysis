@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'maven'
+}
+
+group 'io.beam.exp'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+mainClassName = 'io.beam.exp.boilerplate.Main'
+
+
+
+repositories {
+    mavenCentral()
+}
+
+ext{
+    beamVersion = '2.15.0'
+    slf4jVersion = '1.7.28'
+    log4jVersion = '2.12.1'
+}
+
+dependencies {
+
+    compile  "org.apache.beam:beam-sdks-java-core:$beamVersion"
+    compile  "org.apache.beam:beam-sdks-java-io-google-cloud-platform:$beamVersion"
+    compile  "org.apache.beam:beam-sdks-java-io-kafka:$beamVersion"
+
+    compile "org.apache.beam:beam-runners-direct-java:$beamVersion"
+    runtime "org.apache.beam:beam-runners-direct-java:$beamVersion"
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
