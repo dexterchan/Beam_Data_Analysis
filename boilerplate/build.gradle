@@ -1,8 +1,21 @@
-plugins {
+/*plugins {
     id 'java'
     id 'application'
     id 'maven'
+}*/
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjarVersion"
+    }
 }
+
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'io.beam.exp'
 version '1.0-SNAPSHOT'
@@ -16,11 +29,6 @@ repositories {
     mavenCentral()
 }
 
-ext{
-    beamVersion = '2.15.0'
-    slf4jVersion = '1.7.28'
-    log4jVersion = '2.12.1'
-}
 
 dependencies {
 
@@ -37,3 +45,15 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+
+
+
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+
+}
+
+
