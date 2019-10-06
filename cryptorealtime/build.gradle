@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+}
+
+group 'io.beam.exp'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext{
+    xchangestreamVersion = "4.4.0"
+    junitVersion = "5.3.1"
+    assetjVersion = "3.13.2"
+}
+dependencies {
+
+    //Exchange listed here
+    compile group: 'info.bitrich.xchange-stream', name: 'xchange-stream-core', version: "$xchangestreamVersion"
+    compile group: 'info.bitrich.xchange-stream', name: 'xchange-hitbtc', version: "$xchangestreamVersion"
+    compile group: 'info.bitrich.xchange-stream', name: 'xchange-bitstamp', version: "$xchangestreamVersion"
+
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
+    testCompile group: 'org.assertj', name: 'assertj-core', version: "$assetjVersion"
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
