@@ -1,11 +1,14 @@
 package io.beam.exp.cryptorealtime;
 
+import model.OrderBook;
 import model.Quote;
+import model.TradeEx;
 
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public interface ExchangeQuoteInterface extends AutoCloseable {
 
-    public void subscribe(Supplier<Quote> handle);
+    public void subscribe(Consumer<TradeEx> handle,Consumer<Quote> ohandle);
+
 
 }

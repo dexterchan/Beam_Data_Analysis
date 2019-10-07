@@ -15,6 +15,7 @@ ext{
     xchangestreamVersion = "4.4.0"
     junitVersion = "5.3.1"
     assetjVersion = "3.13.2"
+    gsonVersion = "2.8.6"
 }
 dependencies {
 
@@ -22,12 +23,18 @@ dependencies {
     compile group: 'info.bitrich.xchange-stream', name: 'xchange-stream-core', version: "$xchangestreamVersion"
     compile group: 'info.bitrich.xchange-stream', name: 'xchange-hitbtc', version: "$xchangestreamVersion"
     compile group: 'info.bitrich.xchange-stream', name: 'xchange-bitstamp', version: "$xchangestreamVersion"
+    compile group: 'info.bitrich.xchange-stream', name: 'xchange-bitfinex', version: "$xchangestreamVersion"
+
+    compile group: 'info.bitrich.xchange-stream', name: 'xchange-binance', version: "$xchangestreamVersion"
+
+    compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 
 
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
+    providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
 
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
