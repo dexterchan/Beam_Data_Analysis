@@ -1,12 +1,10 @@
 package io.beam.exp.cryptorealtime;
 
-import com.sun.org.apache.xpath.internal.operations.Quo;
-import info.bitrich.xchangestream.binance.BinanceStreamingExchange;
-import info.bitrich.xchangestream.bitstamp.v2.BitstampStreamingExchange;
+
 import info.bitrich.xchangestream.hitbtc.HitbtcStreamingExchange;
 import model.Quote;
 import model.TradeEx;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +14,7 @@ import java.util.concurrent.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("conectiontest")
 class XChangeStreamCoreQuoteServiceTest {
     Logger log = LoggerFactory.getLogger(XChangeStreamCoreQuoteServiceTest.class);
 
@@ -53,7 +52,7 @@ class XChangeStreamCoreQuoteServiceTest {
 
             ExecutorService executor = Executors.newCachedThreadPool();
             executor.execute(() -> {
-                while ((System.currentTimeMillis() - refTime) < 1000 * 5) {
+                while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         TradeEx q = tradequeue.take();
                         log.debug(q.toString());
@@ -64,7 +63,7 @@ class XChangeStreamCoreQuoteServiceTest {
                 }
             });
             executor.execute(()->{
-                while ((System.currentTimeMillis() - refTime) < 1000 * 5) {
+                while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         Quote q = quoteQueue.take();
                         log.debug(q.toString());
@@ -77,7 +76,7 @@ class XChangeStreamCoreQuoteServiceTest {
 
             executor.shutdown();
             try {
-                if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
                     executor.shutdownNow();
                 }
             } catch (InterruptedException e) {
