@@ -1,4 +1,16 @@
 
+## Design Document
+Divides into modules:
+1) realtime cryptosubscriber <br>
+A executable connecting to Crypto exchange via module cryptorealtime.
+Now, it temporally subscribe to "hitbtc" via API 
+[XChange-stream Java API](https://github.com/bitrich-info/xchange-stream)
+
+    The module supports Restful API to control the subscription.
+
+
+
+
 ## Boilerplate
 
 Build

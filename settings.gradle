@@ -1,4 +1,5 @@
 rootProject.name = 'Beam_Data_Analysis'
-include 'boilerplate'
+//include 'boilerplate'
 include 'cryptorealtime'
+include 'cryptosubscriber'
 
