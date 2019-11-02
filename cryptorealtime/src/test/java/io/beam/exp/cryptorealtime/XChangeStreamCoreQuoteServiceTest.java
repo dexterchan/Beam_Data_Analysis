@@ -55,7 +55,7 @@ class XChangeStreamCoreQuoteServiceTest {
                 while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         TradeEx q = tradequeue.take();
-                        log.debug(q.toString());
+                        log.debug("TradeEx:"+q.toString());
                         assertThat(q.getPrice()).isNotNull();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -66,7 +66,7 @@ class XChangeStreamCoreQuoteServiceTest {
                 while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         Quote q = quoteQueue.take();
-                        log.debug(q.toString());
+                        log.debug("Quote:"+q.toString());
                         assertThat(q.getBid()).isNotNull();
                     } catch (Exception ex) {
                         ex.printStackTrace();

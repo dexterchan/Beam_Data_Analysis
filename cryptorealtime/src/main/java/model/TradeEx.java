@@ -1,21 +1,33 @@
 package model;
 
+import com.google.gson.Gson;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
 
 public class TradeEx {
     public enum OrderType{
         BID,ASK
     };
 
+    protected  String exchange;
     protected  OrderType type;
-    protected  BigDecimal originalAmount;
+    protected  double originalAmount;
     protected  String currencyPair;
-    protected  BigDecimal price;
+    protected  double price;
     protected  Date timestamp;
+
+    public String getExchange() {
+        return Optional.ofNullable(this.exchange).map(Function.identity()).orElse("DEFAULT");
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
 
     public OrderType getType() {
         return type;
@@ -25,11 +37,11 @@ public class TradeEx {
         this.type = type;
     }
 
-    public BigDecimal getOriginalAmount() {
+    public double getOriginalAmount() {
         return originalAmount;
     }
 
-    public void setOriginalAmount(BigDecimal originalAmount) {
+    public void setOriginalAmount(double originalAmount) {
         this.originalAmount = originalAmount;
     }
 
@@ -41,11 +53,11 @@ public class TradeEx {
         this.currencyPair = currencyPair;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -59,12 +71,13 @@ public class TradeEx {
 
     @Override
     public String toString() {
-        return "TradeEx{" +
-                "type=" + type +
-                ", originalAmount=" + originalAmount +
-                ", currencyPair='" + currencyPair + '\'' +
-                ", price=" + price +
-                ", timestamp=" + timestamp +
-                '}';
+        Gson g = new Gson();
+        return g.toJson(this);
+    }
+
+    public static String getKey(TradeEx t){
+        String key = String.format("%s_%s_%s_%d_%s",t.getExchange(),t.getCurrencyPair(), t.getType() ,t.timestamp.getTime(), UUID.randomUUID().toString());
+        key=key.replaceAll("/|\\\\","");
+        return key;
     }
 }

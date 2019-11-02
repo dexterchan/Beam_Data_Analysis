@@ -32,5 +32,33 @@ ext{
     assetjVersion = "3.13.2"
     gsonVersion = "2.8.6"
     lombokVersion = '1.18.10'
+    firebaseVersion = '6.11.0'
+    jacksonDataBindVersion = '2.10.0'
+}
 
+
+
+test {
+    useJUnitPlatform {
+        //includeTags 'model','controllers'
+        excludeTags 'integration'
+    }
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+    check.dependsOn it
+    shouldRunAfter test
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

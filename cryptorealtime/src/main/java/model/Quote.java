@@ -1,20 +1,33 @@
 package model;
 
+import com.google.gson.Gson;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class Quote {
+    private String exchange;
     private String currencyPair;
-    private BigDecimal open;
-    private BigDecimal last;
-    private BigDecimal bid;
-    private BigDecimal ask;
-    private BigDecimal high;
-    private BigDecimal low;
+    private double open;
+    private double last;
+    private double bid;
+    private double ask;
+    private double high;
+    private double low;
 
-    private BigDecimal volume;
-    private BigDecimal quoteVolume;
+    private double volume;
+    private double quoteVolume;
     protected Date timestamp;
+
+    public String getExchange() {
+        return Optional.ofNullable(this.exchange).map(Function.identity()).orElse("DEFAULT");
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
 
     public String getCurrencyPair() {
         return currencyPair;
@@ -24,67 +37,67 @@ public class Quote {
         this.currencyPair = currencyPair;
     }
 
-    public BigDecimal getOpen() {
+    public double getOpen() {
         return open;
     }
 
-    public void setOpen(BigDecimal open) {
+    public void setOpen(double open) {
         this.open = open;
     }
 
-    public BigDecimal getLast() {
+    public double getLast() {
         return last;
     }
 
-    public void setLast(BigDecimal last) {
+    public void setLast(double last) {
         this.last = last;
     }
 
-    public BigDecimal getBid() {
+    public double getBid() {
         return bid;
     }
 
-    public void setBid(BigDecimal bid) {
+    public void setBid(double bid) {
         this.bid = bid;
     }
 
-    public BigDecimal getAsk() {
+    public double getAsk() {
         return ask;
     }
 
-    public void setAsk(BigDecimal ask) {
+    public void setAsk(double ask) {
         this.ask = ask;
     }
 
-    public BigDecimal getHigh() {
+    public double getHigh() {
         return high;
     }
 
-    public void setHigh(BigDecimal high) {
+    public void setHigh(double high) {
         this.high = high;
     }
 
-    public BigDecimal getLow() {
+    public double getLow() {
         return low;
     }
 
-    public void setLow(BigDecimal low) {
+    public void setLow(double low) {
         this.low = low;
     }
 
-    public BigDecimal getVolume() {
+    public double getVolume() {
         return volume;
     }
 
-    public void setVolume(BigDecimal volume) {
+    public void setVolume(double volume) {
         this.volume = volume;
     }
 
-    public BigDecimal getQuoteVolume() {
+    public double getQuoteVolume() {
         return quoteVolume;
     }
 
-    public void setQuoteVolume(BigDecimal quoteVolume) {
+    public void setQuoteVolume(double quoteVolume) {
         this.quoteVolume = quoteVolume;
     }
 
@@ -98,16 +111,13 @@ public class Quote {
 
     @Override
     public String toString() {
-        return "Quote{" +
-                "currencyPair='" + currencyPair + '\'' +
-                ", open=" + open +
-                ", last=" + last +
-                ", bid=" + bid +
-                ", ask=" + ask +
-                ", high=" + high +
-                ", low=" + low +
-                ", volume=" + volume +
-                ", quoteVolume=" + quoteVolume +
-                '}';
+        Gson g = new Gson();
+        return g.toJson(this);
+    }
+
+    public static String getKey(Quote q){
+        String key = String.format("%s_%s_%d",q.getExchange(),q.currencyPair, q.timestamp.getTime());
+        key=key.replaceAll("/|\\\\","");
+        return key;
     }
 }

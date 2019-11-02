@@ -11,4 +11,5 @@ public interface ExchangeQuoteInterface extends AutoCloseable {
     public void subscribe(Consumer<TradeEx> handle,Consumer<Quote> ohandle);
 
 
+    public void unsubscribe() throws Exception;
 }

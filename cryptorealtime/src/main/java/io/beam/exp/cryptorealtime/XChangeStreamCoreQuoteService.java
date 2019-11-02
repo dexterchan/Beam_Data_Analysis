@@ -14,6 +14,7 @@ import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,13 +70,23 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
                     log.error("Error in subscribing quote.", throwable);
                 });
 
+
+    }
+
+    @Override
+    public void unsubscribe() throws Exception{
+        this.close();
     }
 
     static TradeEx convertTradeEx(Trade t) {
         TradeEx q = new TradeEx();
         q.setCurrencyPair(t.getCurrencyPair().toString());
-        q.setOriginalAmount(t.getOriginalAmount());
-        q.setPrice(t.getPrice());
+        q.setOriginalAmount(
+                Optional.ofNullable(t.getOriginalAmount()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
+        q.setPrice(
+                Optional.ofNullable(t.getPrice()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
         q.setTimestamp(t.getTimestamp());
         if (t.getType() == Order.OrderType.ASK) {
             q.setType(TradeEx.OrderType.ASK);
@@ -87,15 +98,27 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
 
     static Quote convertQuote(Ticker t) {
         Quote q = new Quote();
-        q.setVolume(t.getVolume());
-        q.setAsk(t.getAsk());
-        q.setBid(t.getBid());
+        q.setVolume(Optional.ofNullable(t.getVolume()).map(BigDecimal::doubleValue).orElse(0.0));
+        q.setAsk(Optional.ofNullable(t.getAsk()).map(BigDecimal::doubleValue).orElse(0.0));
+        q.setBid(
+                Optional.ofNullable(t.getBid()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
         q.setCurrencyPair(t.getCurrencyPair().toString());
-        q.setHigh(t.getHigh());
-        q.setLast(t.getLast());
-        q.setLow(t.getLow());
-        q.setOpen(t.getOpen());
-        q.setQuoteVolume(t.getQuoteVolume());
+        q.setHigh(
+                Optional.ofNullable(t.getHigh()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
+        q.setLast(
+                Optional.ofNullable(t.getLast()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
+        q.setLow(
+                Optional.ofNullable(t.getLow()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
+        q.setOpen(
+                Optional.ofNullable(t.getOpen()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
+        q.setQuoteVolume(
+                Optional.ofNullable(t.getQuoteVolume()).map(BigDecimal::doubleValue).orElse(0.0)
+        );
         q.setTimestamp(t.getTimestamp());
 
         return q;
