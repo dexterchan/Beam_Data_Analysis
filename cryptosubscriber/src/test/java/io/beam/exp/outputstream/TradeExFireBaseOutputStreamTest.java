@@ -3,10 +3,12 @@ package io.beam.exp.outputstream;
 import com.google.gson.Gson;
 import model.TradeEx;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("integration")
 class TradeExFireBaseOutputStreamTest {
 
     TradeEx tradeex;
