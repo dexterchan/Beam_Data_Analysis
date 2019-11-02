@@ -60,6 +60,29 @@ dependencies {
 dependencies {
     compile project(':cryptorealtime')
 }
+
+
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        //includeTags 'model','controllers'
+        excludeTags 'integration'
+    }
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+    check.dependsOn it
+    shouldRunAfter test
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
