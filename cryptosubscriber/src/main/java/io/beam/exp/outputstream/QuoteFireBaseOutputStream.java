@@ -26,19 +26,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class QuoteFireBaseOutputStream implements CryptoDataOutputStream<Quote> {
-    Logger log = LoggerFactory.getLogger(QuoteFireBaseOutputStream.class);
-    private Firestore myDB = null;
+public class QuoteFireBaseOutputStream extends CryptoDataFireBaseOutputStream<Quote> implements CryptoDataOutputStream<Quote> {
+
     private final static String CollectionName = "Quote";
     public QuoteFireBaseOutputStream() throws FileNotFoundException, IOException {
-        myDB = FirebaseDBHelper.getFireStoreDB();
+       super();
     }
 
     @Override
     public void write(Quote q) throws Exception{
-        //asynchronously write data
-
-        ApiFuture<WriteResult> result =  myDB.collection(CollectionName).document(Quote.getKey(q)).set(q);
-        log.debug("Update time : " + result.get().getUpdateTime());
+        super.write(CollectionName, Quote.getKey(q), q);
     }
 }
