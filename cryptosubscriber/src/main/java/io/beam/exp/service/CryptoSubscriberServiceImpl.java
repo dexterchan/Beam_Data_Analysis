@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import model.Quote;
 import model.TradeEx;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -25,7 +26,9 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
 
     private final Map<String, ExchangeStub> exchangeStatusMap = Maps.newConcurrentMap();
 
+    @Autowired
     private final TradeExFireBaseOutputStream TradeExOutputStream;
+    @Autowired
     private final QuoteFireBaseOutputStream QuoteOutputStream;
 
 
