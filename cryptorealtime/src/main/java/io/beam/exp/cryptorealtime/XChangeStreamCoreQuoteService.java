@@ -1,7 +1,9 @@
 package io.beam.exp.cryptorealtime;
 
+import com.google.common.collect.ImmutableMap;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingExchangeFactory;
+import info.bitrich.xchangestream.hitbtc.HitbtcStreamingExchange;
 import io.reactivex.disposables.Disposable;
 import model.OrderBook;
 import model.Quote;
@@ -34,6 +36,20 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
     StreamingExchange exchange = null;
     Disposable orderBooksubscription = null;
     Disposable tickSubscription = null;
+
+    private static final Map<String, String> exchangeClassMap = ImmutableMap.of(
+            "hitbtc", HitbtcStreamingExchange.class.getName());
+
+    public static ExchangeQuoteInterface of(String currencyExchangeName, String baseSymbol, String counterSymbol) {
+
+        String exchName = Optional.of(exchangeClassMap.get(currencyExchangeName)).get();
+
+        XChangeStreamCoreQuoteService exch = new XChangeStreamCoreQuoteService();
+        exch.exchange = StreamingExchangeFactory.INSTANCE.createExchange(exchName);
+        exch.pair = new CurrencyPair(String.format("%s/%s", baseSymbol, counterSymbol));
+
+        return exch;
+    }
 
     @Override
     public void subscribe(Consumer<TradeEx> handle, Consumer<Quote> ohandle) {
@@ -136,12 +152,6 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
         Optional.ofNullable(tickSubscription).ifPresent(x -> x.dispose());
     }
 
-    public static ExchangeQuoteInterface of(String currencyExchangeName, String baseSymbol, String counterSymbol) {
-        XChangeStreamCoreQuoteService exch = new XChangeStreamCoreQuoteService();
-        exch.exchange = StreamingExchangeFactory.INSTANCE.createExchange(currencyExchangeName);
-        exch.pair = new CurrencyPair(String.format("%s/%s", baseSymbol, counterSymbol));
 
-        return exch;
-    }
 
 }

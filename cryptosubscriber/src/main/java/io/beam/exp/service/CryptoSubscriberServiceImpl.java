@@ -41,9 +41,6 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
         return String.format("%s_%s_%s",exchange,baseCcy,counterCcy);
     }
 
-    private final Map<String, String> exchangeClassMap = ImmutableMap.of(
-            "hitbtc",HitbtcStreamingExchange.class.getName());
-
     @Override
     public void startSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Start service");
@@ -56,7 +53,7 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     @Override
     public void stopSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Stop service");
-        String exchName = Optional.of(exchangeClassMap.get("hitbtc")).get();
+        //String exchName = Optional.of(exchangeClassMap.get("hitbtc")).get();
 
     }
 
@@ -68,9 +65,9 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     }
     private ExchangeStub createSubscription(String exchange, String baseCcy, String counterCcy){
         ExchangeStub exchangeStub = new ExchangeStub();
-        String exchName = Optional.of(exchangeClassMap.get(exchange)).get();
+
         try{
-            exchangeStub.exInf = XChangeStreamCoreQuoteService.of(exchName, baseCcy, counterCcy);
+            exchangeStub.exInf = XChangeStreamCoreQuoteService.of(exchange, baseCcy, counterCcy);
             exchangeStub.exInf.subscribe(
                     tradeex->{
                         try {
