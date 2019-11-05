@@ -2,6 +2,7 @@ plugins {
     id 'java'
 }
 
+
 group 'io.beam.exp'
 version '1.0-SNAPSHOT'
 
@@ -63,3 +64,4 @@ task integrationTest(type: Test) {
         events "passed", "skipped", "failed"
     }
 }
+

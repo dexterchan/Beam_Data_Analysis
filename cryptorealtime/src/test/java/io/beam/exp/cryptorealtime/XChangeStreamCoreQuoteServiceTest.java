@@ -23,7 +23,7 @@ class XChangeStreamCoreQuoteServiceTest {
     //@Disabled
     @Test
     void testSubsribeHitbtcStreamingExchange() {
-        String exchName = HitbtcStreamingExchange.class.getName();
+        String exchName = "hitbtc";
         log.debug(exchName);
         String baseCcy = "BTC";
         String counterCcy = "USD";
