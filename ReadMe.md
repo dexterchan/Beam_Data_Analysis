@@ -21,3 +21,11 @@ Checking
 ````
 java -classpath boilerplate/build/libs/boilerplate-1.0-SNAPSHOT.jar  io.beam.exp.boilerplate.Main
 ````
+
+## Docker 
+build
+````
+docker build -t gcr.io/peer2peer/cryptosubscribercore:alpine .
+
+docker run -it --rm -v /home/humble_pig_2019_mar/.ssh:/tmp -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp.serviceacct.peer2peer-67bc368759d4.json gcr.io/peer2peer/cryptosubscribercore:alpine
+````
