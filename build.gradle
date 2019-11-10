@@ -9,17 +9,7 @@ repositories {
     mavenCentral()
 }
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    ext{
-        shadowjarVersion = '4.0.3'
-    }
-    dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjarVersion"
-    }
-}
+
 
 
 

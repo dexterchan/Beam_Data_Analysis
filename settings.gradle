@@ -3,4 +3,5 @@ rootProject.name = 'Beam_Data_Analysis'
 include 'cryptorealtime'
 include 'cryptosubscriber'
 include 'cryptosubscribercore'
+include 'cryptosubscribervertx'
 
