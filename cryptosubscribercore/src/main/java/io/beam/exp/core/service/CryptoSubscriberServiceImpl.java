@@ -1,6 +1,8 @@
 package io.beam.exp.core.service;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import io.beam.exp.core.outputStream.CryptoDataOutputStream;
 import io.beam.exp.cryptorealtime.ExchangeQuoteInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
 import io.beam.exp.core.outputStream.QuoteFireBaseOutputStream;
@@ -10,8 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import model.Quote;
 import model.TradeEx;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -21,8 +27,8 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     private final Map<String, ExchangeStub> exchangeStatusMap = Maps.newConcurrentMap();
 
 
-    private final TradeExFireBaseOutputStream TradeExOutputStream;
-    private final QuoteFireBaseOutputStream QuoteOutputStream;
+    private final CryptoDataOutputStream<TradeEx> TradeExOutputStream;
+    private final CryptoDataOutputStream<Quote> QuoteOutputStream;
 
 
     BlockingQueue<TradeEx> tradequeue = new LinkedBlockingQueue<>();
@@ -34,11 +40,18 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
         return String.format("%s_%s_%s",exchange,baseCcy,counterCcy);
     }
 
+    private static String filterExchange(String exchange){
+        if(exchange==null || exchange.length()==0){
+            exchange="hitbtc";
+        }
+        return exchange;
+    }
+
     @Override
     public void startSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Start service");
-
-        ExchangeStub exchStub = createSubscription("hitbtc", baseCcy, counterCcy);
+        exchange = filterExchange(exchange);
+        ExchangeStub exchStub = createSubscription(exchange, baseCcy, counterCcy);
         exchangeStatusMap.put(getExchangeKey(exchange,baseCcy,counterCcy), exchStub);
 
     }
@@ -46,8 +59,33 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     @Override
     public void stopSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Stop service");
-        //String exchName = Optional.of(exchangeClassMap.get("hitbtc")).get();
+        exchange = filterExchange(exchange);
+        Optional.of(exchangeStatusMap.get(getExchangeKey(exchange,baseCcy,counterCcy)))
+                .ifPresent(exchangeStub->{
+                    try {
+                        exchangeStub.exInf.unsubscribe();
+                    }catch(Exception ex){
+                        log.error(ex.getMessage());
+                    }
+                });
+    }
 
+    @Override
+    public List<Map<String,String>> listSubscription() {
+
+        List<Map<String,String>> lst = exchangeStatusMap.keySet().stream().map(
+                key->{
+                    ExchangeStub stub = exchangeStatusMap.get(key);
+
+                    return ImmutableMap.of(
+                            "key", key,
+                            "TurnOn", Boolean.toString(stub.TurnOn),
+                            "QuoteStatus", stub.QuoteStatus,
+                            "TradeExStatus", stub.TradeExStatus
+                    );
+                }
+        ).collect(Collectors.toList());
+        return lst;
     }
 
     private class ExchangeStub{

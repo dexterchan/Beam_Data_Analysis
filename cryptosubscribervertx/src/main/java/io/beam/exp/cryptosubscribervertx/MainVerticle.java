@@ -7,16 +7,20 @@ import io.beam.exp.core.service.CryptoSubscriberServiceImpl;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MainVerticle extends AbstractVerticle {
 
+  CryptoSubscriberService cryptoSubscriberService = null;
+  ExecutorService executor = Executors.newCachedThreadPool();
 
+  private final static boolean RUN_SUBSCRIPTION_AT_START = false;
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-    vertx.createHttpServer().requestHandler(req -> {
-      req.response()
-        .putHeader("content-type", "text/plain")
-        .end("Hello from Vert.x!");
-    }).listen(8888, http -> {
+    vertx.createHttpServer().requestHandler(
+        RouterHelper.createRouter(vertx,cryptoSubscriberService)
+    ).listen(8888, http -> {
       if (http.succeeded()) {
         startPromise.complete();
         System.out.println("HTTP server started on port 8888");
@@ -24,9 +28,17 @@ public class MainVerticle extends AbstractVerticle {
         startPromise.fail(http.cause());
       }
     });
-    CryptoSubscriberService cryptoSubscriberService = new CryptoSubscriberServiceImpl(
+
+
+
+    cryptoSubscriberService = new CryptoSubscriberServiceImpl(
       new TradeExFireBaseOutputStream(),new QuoteFireBaseOutputStream());
-    cryptoSubscriberService.startSubscription("","BTC","USD");
+
+    executor.execute(()->{
+      if(RUN_SUBSCRIPTION_AT_START)
+        cryptoSubscriberService.startSubscription("","BTC","USD");
+    });
+
 
   }
 }
