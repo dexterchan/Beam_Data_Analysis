@@ -42,11 +42,11 @@ class CryptoSubscriberServiceImplTest {
         cryptoSubscriberService.startSubscription("hitbtc","ETH","USD");
 
         Thread.sleep(1000);
-        List<Map<String,String>>  statusLst= cryptoSubscriberService.listSubscription();
+        List<Map<String,String>>  subscriptionLst= cryptoSubscriberService.listSubscription();
 
-        assertThat(statusLst.size()).isEqualTo(2);
+        assertThat(subscriptionLst.size()).isEqualTo(2);
 
-        statusLst.forEach(
+        subscriptionLst.forEach(
                 status->{
                     assertEquals(status.get("TurnOn"),"true");
                     assertEquals(status.get("QuoteStatus"),"OK");
