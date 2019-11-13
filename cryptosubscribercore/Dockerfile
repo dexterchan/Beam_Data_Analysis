@@ -13,4 +13,4 @@ WORKDIR /opt/app
 
 COPY build/libs/${LIBNAME} .
 
-CMD ["sh","-c","java -jar ${LIBNAME}"]
+CMD ["sh","-c","java -Dvertx.disableFileCPResolving=true -jar  ${LIBNAME}"]
