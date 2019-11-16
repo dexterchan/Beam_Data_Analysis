@@ -35,6 +35,11 @@ dependencies {
   compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
   compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
+  compileOnly("org.projectlombok:lombok:${lombokVersion}")
+  testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+  annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+  testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
