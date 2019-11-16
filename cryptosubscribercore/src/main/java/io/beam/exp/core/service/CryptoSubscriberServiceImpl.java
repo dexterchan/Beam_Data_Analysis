@@ -64,6 +64,9 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                 .ifPresent(exchangeStub->{
                     try {
                         exchangeStub.exInf.unsubscribe();
+                        exchangeStub.TurnOn=false;
+                        exchangeStub.TradeExStatus="STOP";
+                        exchangeStub.QuoteStatus="STOP";
                     }catch(Exception ex){
                         log.error(ex.getMessage());
                     }
@@ -103,7 +106,8 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                     tradeex->{
                         try {
                             tradeex.setExchange(exchange);
-                            tradequeue.put(tradeex);
+                            if (exchangeStub.TurnOn)
+                                tradequeue.put(tradeex);
                             log.info("TradeEx:"+tradeex.toString());
                         }catch(Exception ex) {
                             log.error(ex.getMessage());
@@ -113,7 +117,8 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                     q->{
                         try{
                             q.setExchange(exchange);
-                            quoteQueue.put(q);
+                            if (exchangeStub.TurnOn)
+                                quoteQueue.put(q);
                             log.info("Quote:"+q.toString());
                         }catch(Exception ex){
                             log.error (ex.getMessage());
