@@ -5,14 +5,11 @@ import com.google.common.collect.Maps;
 import io.beam.exp.core.outputStream.CryptoDataOutputStream;
 import io.beam.exp.cryptorealtime.ExchangeQuoteInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
-import io.beam.exp.core.outputStream.QuoteFireBaseOutputStream;
-import io.beam.exp.core.outputStream.TradeExFireBaseOutputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import model.Quote;
 import model.TradeEx;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

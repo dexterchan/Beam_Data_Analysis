@@ -1,4 +1,4 @@
-package io.beam.exp.core.outputStream;
+package io.beam.exp.core.outputStream.firebase;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;

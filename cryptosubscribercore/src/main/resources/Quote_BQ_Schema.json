@@ -1,0 +1,8 @@
+{
+  "timestamp": "TIMESTAMP",
+  "exchange": "STRING",
+  "type": "STRING",
+  "originalAmount": "NUMERIC",
+  "currencyPair": "STRING",
+  "price": "NUMERIC"
+}

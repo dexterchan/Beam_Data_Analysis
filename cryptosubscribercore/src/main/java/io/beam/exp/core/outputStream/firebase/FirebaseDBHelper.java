@@ -1,4 +1,4 @@
-package io.beam.exp.core.outputStream;
+package io.beam.exp.core.outputStream.firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;

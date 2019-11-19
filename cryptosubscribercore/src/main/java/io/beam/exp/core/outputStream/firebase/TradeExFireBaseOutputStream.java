@@ -1,5 +1,6 @@
-package io.beam.exp.core.outputStream;
+package io.beam.exp.core.outputStream.firebase;
 
+import io.beam.exp.core.outputStream.CryptoDataOutputStream;
 import model.TradeEx;
 
 import java.io.FileNotFoundException;
