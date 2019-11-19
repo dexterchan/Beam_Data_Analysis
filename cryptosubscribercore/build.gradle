@@ -43,6 +43,8 @@ dependencies {
     compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
+    compile "com.google.cloud:google-cloud-bigquery:${bigqueryVersion}"
+
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 
