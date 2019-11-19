@@ -32,9 +32,15 @@ class CryptoSubscriberServiceImplTest {
 
     @org.junit.jupiter.api.Test
     void listSubscription() throws Exception {
+        tradeExRepository = (tradeex)->{
+            System.out.println(String.format("TradeSubEX %s",tradeex.toString()));
+        };
+        quoteRepository = (quoteex)->{
+            System.out.println(String.format("QuoteSubEx %s",quoteex.toString()));
+        };
         TradeEx ex = new TradeEx();
         Quote q = new Quote();
-        //doNothing().when(tradeExRepository).write(ex);
+        //when(tradeExRepository).write(ex);
         //doNothing().when(quoteRepository).write(q);
         CryptoSubscriberService cryptoSubscriberService = new CryptoSubscriberServiceImpl(tradeExRepository, quoteRepository);
 

@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 
@@ -71,7 +72,9 @@ public class TradeEx {
 
     @Override
     public String toString() {
-        Gson g = new Gson();
+        Gson g = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd hh:mm:ss.S")
+                .create();
         return g.toJson(this);
     }
 
