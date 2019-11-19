@@ -7,4 +7,5 @@ public interface CryptoSubscriberService {
     public void startSubscription(String exchange, String baseCcy, String counterCcy);
     public void stopSubscription(String exchange, String baseCcy, String counterCcy);
     public List<Map<String,String>> listSubscription();
+    public Map<String, String> getSubscription(String exchange, String baseCcy, String counterCcy);
 }

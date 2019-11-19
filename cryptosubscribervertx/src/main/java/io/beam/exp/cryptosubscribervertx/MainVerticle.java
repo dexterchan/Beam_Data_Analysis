@@ -16,12 +16,12 @@ public class MainVerticle extends AbstractVerticle {
   //CryptoSubscriberService cryptoSubscriberService = null;
   //ExecutorService executor = Executors.newCachedThreadPool();
 
-  private final static boolean RUN_SUBSCRIPTION_AT_START = false;
+  private final static boolean RUN_SUBSCRIPTION_AT_START = true;
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
     if (RUN_SUBSCRIPTION_AT_START)
-      CryptoSubscriptionExecutor.startSubscription("ETH", "USD");
+      CryptoSubscriptionExecutor.startSubscription("BTC", "USD");
 
     vertx.createHttpServer().requestHandler(
       RouterHelper.createRouter(vertx)

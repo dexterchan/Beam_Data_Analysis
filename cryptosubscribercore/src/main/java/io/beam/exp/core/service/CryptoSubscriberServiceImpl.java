@@ -51,9 +51,17 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     public void startSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Start service");
         exchange = filterExchange(exchange);
+        String key = getExchangeKey(exchange,baseCcy,counterCcy);
+        if(exchangeStatusMap.containsKey(key)){
+            ExchangeStub stub = exchangeStatusMap.get(key);
+            if(stub.TurnOn){
+                return;
+            }else if(stub.TradeExStatus.equals("OK") && stub.QuoteStatus.equals("OK")){
+                return;
+            }
+        }
         ExchangeStub exchStub = createSubscription(exchange, baseCcy, counterCcy);
-        exchangeStatusMap.put(getExchangeKey(exchange,baseCcy,counterCcy), exchStub);
-
+        exchangeStatusMap.put(key, exchStub);
     }
 
     @Override
@@ -89,6 +97,18 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                 }
         ).collect(Collectors.toList());
         return lst;
+    }
+    @Override
+    public Map<String, String> getSubscription(String exchange, String baseCcy, String counterCcy){
+        exchange = filterExchange(exchange);
+        String key = getExchangeKey(exchange,baseCcy,counterCcy);
+
+        return Optional.ofNullable(exchangeStatusMap.get(key)).map(stub->ImmutableMap.of(
+                "key", key,
+                "TurnOn", Boolean.toString(stub.TurnOn),
+                "QuoteStatus", stub.QuoteStatus,
+                "TradeExStatus", stub.TradeExStatus
+        )).orElse(ImmutableMap.<String, String>builder().build());
     }
 
     private class ExchangeStub{

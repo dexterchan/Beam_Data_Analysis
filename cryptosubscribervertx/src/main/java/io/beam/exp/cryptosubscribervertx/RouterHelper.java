@@ -4,15 +4,15 @@ import com.google.gson.Gson;
 import io.beam.exp.core.service.CryptoSubscriberService;
 import io.beam.exp.cryptosubscribervertx.domain.CryptoSubscriptionExecutor;
 import io.beam.exp.cryptosubscribervertx.exception.InvalidInputParameter;
-import io.beam.exp.cryptosubscribervertx.handler.CreateSubscriptionStatus;
+import io.beam.exp.cryptosubscribervertx.handler.CreateSubscription;
 import io.beam.exp.cryptosubscribervertx.handler.ListSubscriptionStatus;
+import io.beam.exp.cryptosubscribervertx.handler.StopSubscription;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 
-import java.util.List;
 import java.util.Map;
 
 public class RouterHelper {
@@ -30,26 +30,11 @@ public class RouterHelper {
       );
 
     route = router.route("/subscription/create");
-    route.handler(new CreateSubscriptionStatus());
+    route.handler(new CreateSubscription());
 
     route = router.route("/subscription/stop");
     route.handler(
-      routingContext->{
-        HttpServerRequest req = routingContext.request();
-        String baseccy = req.getParam("baseccy");
-        if(baseccy==null){
-          throw new InvalidInputParameter("Base CCY not provided");
-        }
-        String counterccy = req.getParam("counterccy");
-        if(counterccy==null){
-          throw new InvalidInputParameter("Counter CCY not provided");
-        }
-        CryptoSubscriptionExecutor.stopSubscription(baseccy, counterccy);
-        HttpServerResponse response = routingContext.response();
-        response.setChunked(true);
-        response.write("OK");
-        routingContext.response().end();
-      }
+      new StopSubscription()
     );
 
     /*

@@ -1,5 +1,6 @@
 package io.beam.exp.cryptosubscribervertx.handler;
 
+import com.google.gson.Gson;
 import io.beam.exp.cryptosubscribervertx.domain.CryptoSubscriptionExecutor;
 import io.beam.exp.cryptosubscribervertx.exception.InvalidInputParameter;
 import io.vertx.core.Handler;
@@ -7,7 +8,9 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
-public class CreateSubscriptionStatus implements Handler<RoutingContext> {
+import java.util.Map;
+
+public class StopSubscription implements Handler<RoutingContext> {
   @Override
   public void handle(RoutingContext routingContext) {
     HttpServerRequest req = routingContext.request();
@@ -19,10 +22,16 @@ public class CreateSubscriptionStatus implements Handler<RoutingContext> {
     if(counterccy==null){
       throw new InvalidInputParameter("Counter CCY not provided");
     }
-    CryptoSubscriptionExecutor.startSubscription(baseccy, counterccy);
+    CryptoSubscriptionExecutor.stopSubscription(baseccy, counterccy);
+
+    Map<String, String> status = CryptoSubscriptionExecutor.getSubscription(baseccy, counterccy);
+    Gson gson = new Gson();
+    String jsonString = gson.toJson(status);
+
     HttpServerResponse response = routingContext.response();
+    response.putHeader("content-type", "application/json");
     response.setChunked(true);
-    response.write("OK");
+    response.write(jsonString);
     routingContext.response().end();
   }
 }

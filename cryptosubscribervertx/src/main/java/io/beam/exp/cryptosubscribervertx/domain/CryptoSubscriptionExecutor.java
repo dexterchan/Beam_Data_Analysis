@@ -40,4 +40,7 @@ public class CryptoSubscriptionExecutor {
   public static List<Map<String,String>> listSubscription(){
     return cryptoSubscriberService.listSubscription();
   }
+  public static Map<String, String> getSubscription(String baseCcy, String counterCcy){
+    return cryptoSubscriberService.getSubscription("",baseCcy,counterCcy);
+  }
 }
