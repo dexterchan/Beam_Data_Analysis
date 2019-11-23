@@ -1,6 +1,7 @@
 package io.beam.exp.core.outputStream.bigquery;
 
 import com.google.cloud.bigquery.Schema;
+import model.Quote;
 import model.TradeEx;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BigSchemaCreatorTest {
+class BigSchemaProviderTest {
 
     @Test
     void testbqschemaHelper() {
@@ -25,8 +26,8 @@ class BigSchemaCreatorTest {
                 "  \"volume\": \"NUMERIC\"," +
                 "  \"quoteVolume\": \"NUMERIC\"" +
                 "}";
-        BigSchemaCreator bigSchemaCreator = new BigSchemaCreator();
-        Map<String, String> schema = bigSchemaCreator.bqschemaHelper(TradeEx.class);
+        BigSchemaProvider bigSchemaProvider = new BigSchemaProvider();
+        Map<String, String> schema = bigSchemaProvider.bqschemaHelper(Quote.class);
         assertThat(schema).containsEntry("exchange","STRING");
         assertThat(schema).containsEntry("bid","NUMERIC");
         assertThat(schema).hasSize(11);
@@ -34,10 +35,18 @@ class BigSchemaCreatorTest {
     }
 
     @Test
-    void createSchema() {
+    void createTradeExSchema() {
         TradeEx trade = new TradeEx();
-        BigSchemaCreator bigSchemaCreator = new BigSchemaCreator();
-        Schema schema = bigSchemaCreator.createSchema(trade.getClass());
+        BigSchemaProvider bigSchemaProvider = new BigSchemaProvider();
+        Schema schema = bigSchemaProvider.provideSchema(trade.getClass());
+        assertThat(schema).isNotNull();
+
+    }
+    @Test
+    void createQuoteExSchema(){
+        Quote quote = new Quote();
+        BigSchemaProvider bigSchemaProvider = new BigSchemaProvider();
+        Schema schema = bigSchemaProvider.provideSchema(quote.getClass());
         assertThat(schema).isNotNull();
     }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class BigSchemaCreator {
+public class BigSchemaProvider {
 
     final Map<String, String> bqschemaHelper(Class c){
         String className= c.getName();
@@ -68,7 +68,7 @@ public class BigSchemaCreator {
         }
         return LegacySQLTypeName.STRING;
     }
-    public Schema createSchema(Class c){
+    public Schema provideSchema(Class c){
         Map<String, String> fieldMap = bqschemaHelper( c);
 
         List<Field> schemaFields = fieldMap.entrySet().stream().map( entry->Field.of(entry.getKey(),getType(entry.getValue())))

@@ -1,11 +1,13 @@
 package model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -83,4 +85,5 @@ public class TradeEx {
         key=key.replaceAll("/|\\\\","");
         return key;
     }
+
 }

@@ -45,6 +45,12 @@ dependencies {
 
     compile "com.google.cloud:google-cloud-bigquery:${bigqueryVersion}"
 
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$jacksonVersion"
+
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+
+
     testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testCompile "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 

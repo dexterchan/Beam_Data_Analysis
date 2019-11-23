@@ -24,6 +24,7 @@ dependencies {
 
     compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 
+
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"

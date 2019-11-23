@@ -1,10 +1,13 @@
 package io.beam.exp.cryptosubscribervertx.domain;
 
+import io.beam.exp.core.outputStream.bigquery.CryptoDataBigQueryOutputStream;
 import io.beam.exp.core.outputStream.firebase.QuoteFireBaseOutputStream;
 import io.beam.exp.core.outputStream.firebase.TradeExFireBaseOutputStream;
 import io.beam.exp.core.service.CryptoSubscriberService;
 import io.beam.exp.core.service.CryptoSubscriberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import model.Quote;
+import model.TradeEx;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +21,12 @@ public class CryptoSubscriptionExecutor {
 
   static{
     try {
+      String TradeTable = "CryptoTrade";
+      String QuoteTable = "CryptoQuote";
       cryptoSubscriberService = new CryptoSubscriberServiceImpl(
-        new TradeExFireBaseOutputStream(), new QuoteFireBaseOutputStream());
+        new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, TradeTable),
+        new CryptoDataBigQueryOutputStream<Quote>(Quote.class, QuoteTable)
+      );
     }catch(Exception ex){
       log.error(ex.getMessage());
       System.exit(-1);

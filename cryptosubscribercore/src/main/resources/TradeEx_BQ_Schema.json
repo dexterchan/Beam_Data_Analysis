@@ -1,13 +1,8 @@
 {
   "timestamp": "TIMESTAMP",
   "exchange": "STRING",
+  "type": "STRING",
+  "originalAmount": "NUMERIC",
   "currencyPair": "STRING",
-  "open": "NUMERIC",
-  "last": "NUMERIC",
-  "bid": "NUMERIC",
-  "ask": "NUMERIC",
-  "high": "NUMERIC",
-  "low": "NUMERIC",
-  "volume": "NUMERIC",
-  "quoteVolume": "NUMERIC"
+  "price": "NUMERIC"
 }
