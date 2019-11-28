@@ -112,6 +112,8 @@ public class Quote {
         this.timestamp = timestamp;
     }
 
+    public long getTimestamplong(){return timestamp.getTime();}
+
     @Override
     public String toString() {
         Gson g = new GsonBuilder()

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptosubscribervertx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptosubscribervertx
+  template:
+    metadata:
+      labels:
+        app: cryptosubscribervertx
+    spec:
+      containers:
+        - name: cryptostatistic
+          image: gcr.io/peer2peer/cryptosubscribervertx:v0.1
+
+          resources:
+            requests:
+              memory: "100Mi"
+            limits:
+              memory: "500Mi"
+          # This setting makes nodes pull the docker image every time before
+          # starting the pod. This is useful when debugging, but should be turned
+          # off in production.
+          imagePullPolicy: Always
+
+          ports:
+            - name: vertxhttp
+              containerPort: 8888
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockchaininfo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blockchaininfo
+  template:
+    metadata:
+      labels:
+        app: blockchaininfo
+    spec:
+      containers:
+        - name: cryptostatistic
+          image: gcr.io/peer2peer/blockchaininfo:v0.1
+
+          resources:
+            requests:
+              memory: "100Mi"
+            limits:
+              memory: "300Mi"
+          # This setting makes nodes pull the docker image every time before
+          # starting the pod. This is useful when debugging, but should be turned
+          # off in production.
+          imagePullPolicy: Always

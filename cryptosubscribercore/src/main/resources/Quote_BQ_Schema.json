@@ -9,5 +9,6 @@
   "high": "NUMERIC",
   "low": "NUMERIC",
   "volume": "NUMERIC",
-  "quoteVolume": "NUMERIC"
+  "quoteVolume": "NUMERIC",
+  "timestamplong": "INTEGER"
 }
