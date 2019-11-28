@@ -4,4 +4,5 @@ include 'cryptorealtime'
 //include 'cryptosubscriber'
 include 'cryptosubscribercore'
 include 'cryptosubscribervertx'
+include 'blockchaininfo'
 

@@ -31,8 +31,12 @@ docker run -it --rm -v /home/humble_pig_2019_mar/.ssh:/tmp -e GOOGLE_APPLICATION
 
 docker build -t gcr.io/peer2peer/cryptosubscribervertx:alpine .
 
+docker build -t gcr.io/peer2peer/blockchaininfo:alpine .
+
 docker run -p 80:8888 --restart unless-stopped -it -v /home/humble_pig_2019_mar:/tmp -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp.serviceacct.peer2peer-67bc368759d4.json gcr.io/peer2peer/cryptosubscribervertx:alpine
 
-docker run -p 80:8888 -it --rm -v ~/.ssh/pigpig/:/tmp -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp.serviceacct.peer2peer-67bc368759d4.json  gcr.io/peer2peer/cryptosubscribervertx:alpine sh
+docker run -p 80:8888 -it --rm -v ~/.ssh/pigpig/:/tmp -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp.serviceacct.peer2peer-67bc368759d4.json  gcr.io/peer2peer/cryptosubscribervertx:alpine
+
+docker run -p 80:8888 -it --rm -v ~/.ssh/pigpig/:/tmp -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp.serviceacct.peer2peer-67bc368759d4.json  gcr.io/peer2peer/blockchaininfo:alpine
 
 ````

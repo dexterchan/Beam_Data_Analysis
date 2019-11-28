@@ -1,0 +1,82 @@
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    ext{
+        shadowjarVersion = '4.0.3'
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjarVersion"
+    }
+}
+
+mainClassName = 'io.beam.exp.blockchaininfo.Main'
+
+group 'io.beam.exp'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
+
+
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    compile "com.google.cloud:google-cloud-bigquery:${bigqueryVersion}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$jacksonVersion"
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
+    testCompile group: 'org.assertj', name: 'assertj-core', version: "$assetjVersion"
+}
+
+test {
+    useJUnitPlatform {
+        //includeTags 'model','controllers'
+        excludeTags 'integration'
+    }
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+    check.dependsOn it
+    shouldRunAfter test
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+}

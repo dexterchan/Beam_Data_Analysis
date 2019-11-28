@@ -55,7 +55,6 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
     public void subscribe(Consumer<TradeEx> handle, Consumer<Quote> ohandle) {
         // Connect to the Exchange WebSocket API. Blocking wait for the connection.
         exchange.connect().blockingAwait();
-        BlockingQueue<Quote> blockingQueue = new LinkedBlockingQueue<Quote>();
 
         // Subscribe to live trades update.
         exchange.getStreamingMarketDataService()
