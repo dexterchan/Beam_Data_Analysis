@@ -2,6 +2,7 @@ package io.beam.exp.core.outputStream.bigquery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.bigquery.*;
+import io.beam.exp.core.observe.AsyncObserver;
 import io.beam.exp.core.outputStream.CryptoDataOutputStream;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 @Slf4j
-public class CryptoDataBigQueryOutputStream <T> implements CryptoDataOutputStream<T> {
+public class CryptoDataBigQueryOutputStream <T> extends AsyncObserver<T> implements CryptoDataOutputStream<T> {
 
     // Create a service instance
     private static BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
@@ -51,11 +52,21 @@ public class CryptoDataBigQueryOutputStream <T> implements CryptoDataOutputStrea
 
     }
 
+
     private Map<String, Object> getMapFromPOJO(T obj){
         ObjectMapper oMapper = new ObjectMapper();
         Map<String, Object> m = oMapper.convertValue(obj, Map.class);
         m.put("timestamp", (Long)m.get("timestamp")/1000);
         return m;
+    }
+
+    @Override
+    public void asyncUpdate(T msg) {
+        try{
+            this.write(msg);
+        }catch(Exception ex){
+            log.error(ex.getMessage());
+        }
     }
 
     @Override
@@ -72,4 +83,6 @@ public class CryptoDataBigQueryOutputStream <T> implements CryptoDataOutputStrea
             log.error(insertResponse.toString());
         }
     }
+
+
 }
