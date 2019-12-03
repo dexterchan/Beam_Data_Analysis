@@ -37,6 +37,19 @@ public class RouterHelper {
       new StopSubscription()
     );
 
+    route = router.route("/");
+    route.handler(
+      routingContext->{
+        HttpServerResponse response = routingContext.response();
+        response.putHeader("content-type", "text");
+        // enable chunked responses because we will be adding data as
+        // we execute over other handlers. This is only required once and
+        // only if several handlers do output.
+        response.setChunked(true);
+        response.write("OK").end();
+      }
+    );
+
     /*
     route.handler(routingContext->{
       List<Map<String,String>> subscriptionLst = cryptoSubscriberService.listSubscription();

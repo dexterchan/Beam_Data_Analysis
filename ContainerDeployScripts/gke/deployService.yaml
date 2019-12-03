@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: cryptosubscribervertx-service
 spec:
+  type: NodePort
   ports:
     - port: 8888
       #nodePort: 30390
