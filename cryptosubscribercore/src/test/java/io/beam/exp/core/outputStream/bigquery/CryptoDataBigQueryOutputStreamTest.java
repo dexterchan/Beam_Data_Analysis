@@ -8,6 +8,7 @@ import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.beam.exp.core.observe.Observer;
 import lombok.extern.slf4j.Slf4j;
 import model.Quote;
 import model.TradeEx;
@@ -32,7 +33,7 @@ class CryptoDataBigQueryOutputStreamTest {
     @Test
     void writeQuote() throws Exception {
         final String table = "QuoteTest";
-        CryptoDataBigQueryOutputStream<Quote> bqQuoteStream = new CryptoDataBigQueryOutputStream<Quote>(Quote.class, table);
+        Observer<Quote> observer = new CryptoDataBigQueryOutputStream<Quote>(Quote.class, table);
 
         String QuoteSample="{\"exchange\":\"hitbtc\",\"currencyPair\":\"BTC/USD\",\"open\":0.0,\"last\":8123.72,\"bid\":8121.71,\"ask\":8122.76,\"high\":8466.6,\"low\":8060.01,\"volume\":35528.56615,\"quoteVolume\":2.88624123404078E8,\"timestamp\":\"2019-11-19 06:53:00.883\"}";
         Gson g = new GsonBuilder()
@@ -41,9 +42,8 @@ class CryptoDataBigQueryOutputStreamTest {
         Quote q = g.fromJson(QuoteSample, Quote.class);
         assertNotNull(q);
 
-
-        bqQuoteStream.write(q);
-
+        observer.update(q);
+        Thread.sleep(100);
         log.debug(String.format("SELECT * FROM Crypto.%s LIMIT 5",table));
         // Create a query request
         QueryJobConfiguration queryConfig =
@@ -58,7 +58,7 @@ class CryptoDataBigQueryOutputStreamTest {
     @Test
     void writeTradeEx() throws  Exception{
         final String table = "TradeExTest";
-        CryptoDataBigQueryOutputStream<TradeEx> bqQuoteStream = new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, table);
+        Observer<TradeEx> observer = new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, table);
 
         String TradeExSample = "{\"exchange\":\"hitbtc\",\"type\":\"BID\",\"originalAmount\":1.0E-5,\"currencyPair\":\"BTC/USD\",\"price\":8131.96,\"timestamp\":\"2019-11-19 06:48:44.919\"}";
 
@@ -68,7 +68,8 @@ class CryptoDataBigQueryOutputStreamTest {
         TradeEx t = g.fromJson(TradeExSample, TradeEx.class);
         assertNotNull(t);
 
-        bqQuoteStream.write(t);
+        observer.update(t);
+        Thread.sleep(100);
 
         log.debug(String.format("SELECT * FROM Crypto.%s LIMIT 5",table));
         // Create a query request

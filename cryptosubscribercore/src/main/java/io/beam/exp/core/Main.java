@@ -12,10 +12,7 @@ public class Main {
 
         String TradeTable = "CryptoTrade";
         String QuoteTable = "CryptoQuote";
-        CryptoSubscriberService cryptoSubscriberService = new CryptoSubscriberServiceImpl(
-                new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, TradeTable),
-                new CryptoDataBigQueryOutputStream<Quote>(Quote.class, QuoteTable)
-        );
-        cryptoSubscriberService.startSubscription("","BTC","USD");
+
+        //cryptoSubscriberService.startSubscription("","BTC","USD");
     }
 }

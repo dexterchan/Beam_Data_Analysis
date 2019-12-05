@@ -1,39 +1,31 @@
 package io.beam.exp.core.service;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import io.beam.exp.core.outputStream.CryptoDataOutputStream;
-import io.beam.exp.cryptorealtime.ExchangeQuoteInterface;
+import io.beam.exp.core.observe.Observer;
+import io.beam.exp.core.service.model.MarketData;
+import io.beam.exp.core.service.model.Subscription;
+import io.beam.exp.cryptorealtime.ExchangeInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import model.Quote;
-import model.TradeEx;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 
 @Slf4j
-@RequiredArgsConstructor
-public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
-
-    private final Map<String, ExchangeStub> exchangeStatusMap = Maps.newConcurrentMap();
-
-
-    private final CryptoDataOutputStream<TradeEx> TradeExOutputStream;
-    private final CryptoDataOutputStream<Quote> QuoteOutputStream;
-
-
-    BlockingQueue<TradeEx> tradequeue = new LinkedBlockingQueue<>();
-    BlockingQueue<Quote> quoteQueue = new LinkedBlockingQueue<>();
-
-    ExecutorService executor = Executors.newCachedThreadPool();
+public class CryptoSubscriberServiceImpl implements  CryptoSubscriberService<Object> {
+    private class ExchangeMarketData{
+        MarketData marketData;
+        ExchangeInterface exchangeInterface;
+    }
+    private final Map<String, ExchangeMarketData> exchangeMarketDataMap = Maps.newConcurrentMap();
+    private Map<Class, Set<Observer<Quote>>> observerSetMap = Maps.newConcurrentMap();
 
     private static String getExchangeKey(String exchange, String baseCcy, String counterCcy){
+        exchange = filterExchange(exchange);
         return String.format("%s_%s_%s",exchange,baseCcy,counterCcy);
     }
 
@@ -47,24 +39,19 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
     @Override
     public void startSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Start service");
-        exchange = filterExchange(exchange);
+
         String key = getExchangeKey(exchange,baseCcy,counterCcy);
-        if(exchangeStatusMap.containsKey(key)){
-            ExchangeStub stub = exchangeStatusMap.get(key);
-            if(stub.TurnOn){
-                return;
-            }else if(stub.TradeExStatus.equals("OK") && stub.QuoteStatus.equals("OK")){
-                return;
-            }
+        if (exchangeMarketDataMap.containsKey(key)){
+            throw new IllegalStateException(String.format("%s was in service", key));
         }
-        ExchangeStub exchStub = createSubscription(exchange, baseCcy, counterCcy);
-        exchangeStatusMap.put(key, exchStub);
+        createSubscription( exchange,  baseCcy,  counterCcy);
     }
 
     @Override
     public void stopSubscription(String exchange, String baseCcy, String counterCcy) {
         log.info("Stop service");
         exchange = filterExchange(exchange);
+        /*
         Optional.of(exchangeStatusMap.get(getExchangeKey(exchange,baseCcy,counterCcy)))
                 .ifPresent(exchangeStub->{
                     try {
@@ -75,12 +62,13 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                     }catch(Exception ex){
                         log.error(ex.getMessage());
                     }
-                });
+                });*/
     }
 
     @Override
     public List<Map<String,String>> listSubscription() {
-
+        List<Map<String,String>> lst =null;
+/*
         List<Map<String,String>> lst = exchangeStatusMap.keySet().stream().map(
                 key->{
                     ExchangeStub stub = exchangeStatusMap.get(key);
@@ -92,100 +80,72 @@ public class CryptoSubscriberServiceImpl implements CryptoSubscriberService {
                             "TradeExStatus", stub.TradeExStatus
                     );
                 }
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toList());*/
+
         return lst;
     }
     @Override
     public Map<String, String> getSubscription(String exchange, String baseCcy, String counterCcy){
-        exchange = filterExchange(exchange);
         String key = getExchangeKey(exchange,baseCcy,counterCcy);
-
+/*
         return Optional.ofNullable(exchangeStatusMap.get(key)).map(stub->ImmutableMap.of(
                 "key", key,
                 "TurnOn", Boolean.toString(stub.TurnOn),
                 "QuoteStatus", stub.QuoteStatus,
                 "TradeExStatus", stub.TradeExStatus
-        )).orElse(ImmutableMap.<String, String>builder().build());
+        )).orElse(ImmutableMap.<String, String>builder().build());*/
+        return null;
     }
 
-    private class ExchangeStub{
-        ExchangeQuoteInterface exInf;
-        boolean TurnOn = true;
-        String QuoteStatus = "WAIT";
-        String TradeExStatus = "WAIT";
+
+    public void injectQuoteObserver(Class c, Observer<Quote> observer){
+        this.observerSetMap.putIfAbsent(c, new HashSet<>());
+        Set<Observer<Quote>> observerSet = this.observerSetMap.get(c);
+        observerSet.add(observer);
     }
-    private ExchangeStub createSubscription(String exchange, String baseCcy, String counterCcy){
-        ExchangeStub exchangeStub = new ExchangeStub();
+
+    @Override
+    public void injectQuoteObserver(Observer<Object> observer) {
+
+    }
+
+    private void createSubscription(String exchange, String baseCcy, String counterCcy){
 
         try{
-            exchangeStub.exInf = XChangeStreamCoreQuoteService.of(exchange, baseCcy, counterCcy);
-            exchangeStub.exInf.subscribe(
-                    tradeex->{
-                        try {
-                            tradeex.setExchange(exchange);
-                            if (exchangeStub.TurnOn)
-                                tradequeue.put(tradeex);
-                            log.info("TradeEx:"+tradeex.toString());
-                        }catch(Exception ex) {
-                            log.error(ex.getMessage());
-                            exchangeStub.TradeExStatus = "FAIL_Subsribe";
-                        }
-                    },
-                    q->{
-                        try{
-                            q.setExchange(exchange);
-                            if (exchangeStub.TurnOn)
-                                quoteQueue.put(q);
-                            log.info("Quote:"+q.toString());
-                        }catch(Exception ex){
-                            log.error (ex.getMessage());
-                            exchangeStub.QuoteStatus = "FAIL";
-                        }
+            ExchangeMarketData exchangeMarketData = new ExchangeMarketData();
+            String key = getExchangeKey(exchange,baseCcy,counterCcy);
+            ExchangeInterface exchangeInterface= XChangeStreamCoreQuoteService.of(exchange, baseCcy, counterCcy);
+            MarketData marketData = MarketData.createMarketData(exchange, baseCcy, counterCcy);
+
+            exchangeMarketData.exchangeInterface = exchangeInterface;
+            exchangeMarketData.marketData = marketData;
+
+            observerSetMap.forEach(
+                    (objectClass, observerSet)->{
+                        marketData.addSubscription(objectClass);
+                        Subscription subscription = marketData.getSubscription(objectClass);
+                        observerSet.forEach(
+                                observer -> {
+                                    exchangeInterface.subscribeQuote(
+                                            quote->{
+                                                observer.update(quote);
+                                            },
+                                            ex->{
+                                                observer.throwError(ex);
+                                            }
+                                    );
+                                    subscription.registerObserver(observer);
+                                }
+                        );
                     }
             );
-
-            executor.execute(() -> {
-                while (exchangeStub.TurnOn) {
-                    try {
-                        TradeEx t = tradequeue.take();
-                        TradeExOutputStream.write(t);
-                        exchangeStub.TradeExStatus = "OK";
-                    } catch (Exception ex) {
-                        log.error(ex.getMessage());
-                        exchangeStub.TradeExStatus = "FAIL_Write";
-                    }
-                }
-            });
-
-            executor.execute(() -> {
-                while (exchangeStub.TurnOn) {
-                    try {
-                        Quote q = quoteQueue.take();
-                        QuoteOutputStream.write(q);
-                        exchangeStub.QuoteStatus = "OK";
-                    } catch (Exception ex) {
-                        log.error(ex.getMessage());
-                        exchangeStub.QuoteStatus = "FAIL_Write";
-                    }
-                }
-            });
+            exchangeMarketDataMap.put(key, exchangeMarketData);
 
         }catch (Exception ex) {
             log.error(String.format("%s-%s/%s:%s",exchange, baseCcy,counterCcy,ex.getMessage()));
         }
-        return exchangeStub;
+        return ;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        executor.shutdown();
-        try {
-            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-        }
-    }
+
 }

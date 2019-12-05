@@ -21,10 +21,11 @@ public class CryptoSubscriptionExecutor {
     try {
       String TradeTable = "CryptoTrade";
       String QuoteTable = "CryptoQuote";
+      /*
       cryptoSubscriberService = new CryptoSubscriberServiceImpl(
         new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, TradeTable),
         new CryptoDataBigQueryOutputStream<Quote>(Quote.class, QuoteTable)
-      );
+      );*/
     }catch(Exception ex){
       log.error(ex.getMessage());
       System.exit(-1);

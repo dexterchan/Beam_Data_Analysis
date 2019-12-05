@@ -1,9 +1,9 @@
 package io.beam.exp.cryptorealtime;
 
 
-import info.bitrich.xchangestream.hitbtc.HitbtcStreamingExchange;
 import model.Quote;
 import model.TradeEx;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -20,6 +20,15 @@ class XChangeStreamCoreQuoteServiceTest {
 
     static final int counterTicks = 10;
 
+    int numOfTrade = 0;
+    int numOfQuote = 0;
+
+    @BeforeEach
+    void init(){
+        this.numOfQuote = 0;
+        this.numOfTrade = 0;
+    }
+
     //@Disabled
     @Test
     void testSubsribeHitbtcStreamingExchange() {
@@ -29,25 +38,39 @@ class XChangeStreamCoreQuoteServiceTest {
         String counterCcy = "USD";
         BlockingQueue<TradeEx> tradequeue = new LinkedBlockingQueue<>();
         BlockingQueue<Quote> quoteQueue = new LinkedBlockingQueue<>();
-        try (ExchangeQuoteInterface exInf = XChangeStreamCoreQuoteService.of(exchName, baseCcy, counterCcy);) {
+        try (ExchangeInterface exInf = XChangeStreamCoreQuoteService.of(exchName, baseCcy, counterCcy);) {
             assertNotNull(exInf);
             assertThat(exInf).isNotNull();
 
-            exInf.subscribe(t -> {
-                try {
-                    tradequeue.put(t);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }, q -> {
-                try {
-                    quoteQueue.put(q);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
+            exInf.subscribeTrade(
+                    t -> {
+                        try {
+                            tradequeue.put(t);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    },
+                    ex -> {
+                        ex.printStackTrace();
+                    }
+            );
+            exInf.subscribeQuote(
+                    q -> {
+                        try {
+                            quoteQueue.put(q);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    },
+                    ex -> {
+                        ex.printStackTrace();
+                    }
+
+            );
+
 
             long refTime = System.currentTimeMillis();
+
 
 
             ExecutorService executor = Executors.newCachedThreadPool();
@@ -55,19 +78,21 @@ class XChangeStreamCoreQuoteServiceTest {
                 while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         TradeEx q = tradequeue.take();
-                        log.debug("TradeEx:"+q.toString());
+                        log.debug("TradeEx:" + q.toString());
                         assertThat(q.getPrice()).isNotNull();
+                        this.numOfTrade++;
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-            executor.execute(()->{
+            executor.execute(() -> {
                 while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
                         Quote q = quoteQueue.take();
-                        log.debug("Quote:"+q.toString());
+                        log.debug("Quote:" + q.toString());
                         assertThat(q.getBid()).isNotNull();
+                        this.numOfQuote++;
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -82,7 +107,8 @@ class XChangeStreamCoreQuoteServiceTest {
             } catch (InterruptedException e) {
                 executor.shutdownNow();
             }
-
+            assertThat(this.numOfQuote).isGreaterThan(0);
+            assertThat(this.numOfTrade).isGreaterThan(0);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -17,8 +17,10 @@ public class CryptoDataBigQueryOutputStream <T> extends AsyncObserver<T> impleme
     private static final String datasetId = "Crypto";
 
     private TableId tableId = null;
+    private String myName;
 
     public CryptoDataBigQueryOutputStream(Class c, String tableName) {
+        myName = String.format("Big Query writing to table:%s", tableName);
         try {
             bigquery.create(DatasetInfo.newBuilder(datasetId).build());
         }catch(BigQueryException be){
@@ -63,10 +65,21 @@ public class CryptoDataBigQueryOutputStream <T> extends AsyncObserver<T> impleme
     @Override
     public void asyncUpdate(T msg) {
         try{
-            this.write(msg);
+            if (msg!=null)
+                this.write(msg);
         }catch(Exception ex){
             log.error(ex.getMessage());
         }
+    }
+
+    @Override
+    public void asyncThrowError(Throwable ex) {
+        log.error(ex.getMessage());
+    }
+
+    @Override
+    public String getDescription() {
+        return this.myName;
     }
 
     @Override

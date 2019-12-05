@@ -5,10 +5,8 @@ import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingExchangeFactory;
 import info.bitrich.xchangestream.hitbtc.HitbtcStreamingExchange;
 import io.reactivex.disposables.Disposable;
-import model.OrderBook;
 import model.Quote;
 import model.TradeEx;
-import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.marketdata.Ticker;
@@ -17,19 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
+public class XChangeStreamCoreQuoteService implements ExchangeInterface {
     Logger log = LoggerFactory.getLogger(XChangeStreamCoreQuoteService.class);
 
     CurrencyPair pair = null;
@@ -37,25 +27,48 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
     Disposable orderBooksubscription = null;
     Disposable tickSubscription = null;
 
+    private volatile boolean isConnected= false;
+
     private static final Map<String, String> exchangeClassMap = ImmutableMap.of(
             "hitbtc", HitbtcStreamingExchange.class.getName());
 
-    public static ExchangeQuoteInterface of(String currencyExchangeName, String baseSymbol, String counterSymbol) {
+    public static ExchangeInterface of(String currencyExchangeName, String baseSymbol, String counterSymbol) {
 
         String exchName = Optional.of(exchangeClassMap.get(currencyExchangeName)).get();
 
-        XChangeStreamCoreQuoteService exch = new XChangeStreamCoreQuoteService();
-        exch.exchange = StreamingExchangeFactory.INSTANCE.createExchange(exchName);
-        exch.pair = new CurrencyPair(String.format("%s/%s", baseSymbol, counterSymbol));
+        XChangeStreamCoreQuoteService xChangeStreamCoreQuoteService = new XChangeStreamCoreQuoteService();
+        xChangeStreamCoreQuoteService.exchange = StreamingExchangeFactory.INSTANCE.createExchange(exchName);
+        xChangeStreamCoreQuoteService.pair = new CurrencyPair(String.format("%s/%s", baseSymbol, counterSymbol));
 
-        return exch;
+        return xChangeStreamCoreQuoteService;
+    }
+
+    private final void startConnection (){
+        if (!isConnected) {
+            synchronized (this) {
+                if (!isConnected)
+                    exchange.connect().blockingAwait();
+            }
+        }
     }
 
     @Override
-    public void subscribe(Consumer<TradeEx> handle, Consumer<Quote> ohandle) {
-        // Connect to the Exchange WebSocket API. Blocking wait for the connection.
-        exchange.connect().blockingAwait();
+    public void subscribeQuote(Consumer<Quote> handle, Consumer<Throwable> exception) {
+        this.startConnection();
+        tickSubscription = exchange.getStreamingMarketDataService()
+                .getTicker(pair)
+                .subscribe(tick -> {
+                    Quote q = convertQuote(tick);
+                    handle.accept(q);
+                }, throwable -> {
+                    log.error("Error in subscribing quote.", throwable);
+                    exception.accept(throwable);
+                });
+    }
 
+    @Override
+    public void subscribeTrade(Consumer<TradeEx> handle, Consumer<Throwable> exception) {
+        this.startConnection();
         // Subscribe to live trades update.
         exchange.getStreamingMarketDataService()
                 .getTrades(pair)
@@ -64,28 +77,8 @@ public class XChangeStreamCoreQuoteService implements ExchangeQuoteInterface {
                     handle.accept(q);
                 }, throwable -> {
                     log.error("Error in subscribing trades.", throwable);
+                    exception.accept(throwable);
                 });
-/*
-        // Subscribe order book data with the reference to the subscription.
-         orderBooksubscription = exchange.getStreamingMarketDataService()
-                .getOrderBook(pair)
-                .subscribe(orderBook -> {
-                    // Do something
-                    log.info("Incoming orderBook: {}", orderBook);
-                    OrderBook o=new OrderBook();
-                    ohandle.accept(o);
-                });*/
-
-        tickSubscription = exchange.getStreamingMarketDataService()
-                .getTicker(pair)
-                .subscribe(tick -> {
-                    Quote q = convertQuote(tick);
-                    ohandle.accept(q);
-                }, throwable -> {
-                    log.error("Error in subscribing quote.", throwable);
-                });
-
-
     }
 
     @Override
