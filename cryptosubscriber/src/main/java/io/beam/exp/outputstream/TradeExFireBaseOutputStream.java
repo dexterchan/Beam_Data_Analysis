@@ -3,7 +3,7 @@ package io.beam.exp.outputstream;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

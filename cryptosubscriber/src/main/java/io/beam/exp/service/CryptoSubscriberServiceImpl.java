@@ -9,8 +9,8 @@ import io.beam.exp.outputstream.QuoteFireBaseOutputStream;
 import io.beam.exp.outputstream.TradeExFireBaseOutputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

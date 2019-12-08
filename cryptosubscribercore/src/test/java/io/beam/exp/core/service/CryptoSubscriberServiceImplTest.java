@@ -2,21 +2,15 @@ package io.beam.exp.core.service;
 
 
 import io.beam.exp.core.observe.Observer;
-import io.beam.exp.core.outputStream.CryptoDataOutputStream;
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.mockito.Mock;
 
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 //@Tag("integration")
 class CryptoSubscriberServiceImplTest {

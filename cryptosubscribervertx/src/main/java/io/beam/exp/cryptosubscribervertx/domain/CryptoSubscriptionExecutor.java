@@ -1,11 +1,7 @@
 package io.beam.exp.cryptosubscribervertx.domain;
 
-import io.beam.exp.core.outputStream.bigquery.CryptoDataBigQueryOutputStream;
 import io.beam.exp.core.service.CryptoSubscriberService;
-import io.beam.exp.core.service.CryptoSubscriberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
-import model.TradeEx;
 
 import java.util.List;
 import java.util.Map;

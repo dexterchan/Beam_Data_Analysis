@@ -1,8 +1,7 @@
 package io.beam.exp.cryptorealtime;
 
-import model.OrderBook;
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 
 import java.util.function.Consumer;
 

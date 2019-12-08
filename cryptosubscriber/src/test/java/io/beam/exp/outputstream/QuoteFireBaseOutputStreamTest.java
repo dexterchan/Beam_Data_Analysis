@@ -3,7 +3,7 @@ package io.beam.exp.outputstream;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.gson.Gson;
 
-import model.Quote;
+import io.beam.exp.cryptorealtime.model.Quote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;

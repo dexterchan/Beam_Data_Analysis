@@ -1,12 +1,8 @@
 package io.beam.exp.core.service.model;
 
 import lombok.RequiredArgsConstructor;
-import model.Quote;
-import model.TradeEx;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 

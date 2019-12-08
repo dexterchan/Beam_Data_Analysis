@@ -1,9 +1,8 @@
 package io.beam.exp.core.service;
 
 import io.beam.exp.core.observe.Subject;
-import io.beam.exp.core.service.model.Subscription;
 import io.beam.exp.cryptorealtime.ExchangeInterface;
-import model.Quote;
+import io.beam.exp.cryptorealtime.model.Quote;
 
 public class QuoteCryptoMarketDataService extends AbstractCryptoMarketDataService<Quote> {
     @Override

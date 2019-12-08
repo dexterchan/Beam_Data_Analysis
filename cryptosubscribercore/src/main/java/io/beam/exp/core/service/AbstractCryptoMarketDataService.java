@@ -5,17 +5,13 @@ import com.google.common.collect.Sets;
 import io.beam.exp.core.observe.Observer;
 import io.beam.exp.core.observe.Subject;
 import io.beam.exp.core.service.model.Subscription;
-import io.beam.exp.core.service.model.SubscriptionStatus;
 import io.beam.exp.cryptorealtime.ExchangeInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 @Slf4j
 public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscriberService<T> {
@@ -40,7 +36,8 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscr
         return exchange;
     }
 
-    public void injectQuoteObserver(Observer<T> observer) {
+    @Override
+    public void injectObserver(Observer<T> observer) {
         observerSet.add(observer);
     }
 

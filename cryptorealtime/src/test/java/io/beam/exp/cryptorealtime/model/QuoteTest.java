@@ -1,6 +1,5 @@
-package model;
+package io.beam.exp.cryptorealtime.model;
 
-import jdk.nashorn.internal.runtime.regexp.RegExp;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

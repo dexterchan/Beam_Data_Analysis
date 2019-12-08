@@ -1,8 +1,8 @@
 package io.beam.exp.core.outputStream.bigquery;
 
 import com.google.cloud.bigquery.Schema;
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

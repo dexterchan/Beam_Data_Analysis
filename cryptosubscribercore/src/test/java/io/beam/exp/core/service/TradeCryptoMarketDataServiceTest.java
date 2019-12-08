@@ -3,13 +3,13 @@ package io.beam.exp.core.service;
 import com.google.common.collect.Lists;
 import io.beam.exp.core.observe.Observer;
 import lombok.extern.slf4j.Slf4j;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 @Slf4j
 class TradeCryptoMarketDataServiceTest {
     List<TradeEx> tradeList = Lists.newLinkedList();
@@ -19,6 +19,9 @@ class TradeCryptoMarketDataServiceTest {
         public void update(TradeEx msg) {
             tradeList.add(msg);
             log.debug(msg.toString());
+            synchronized (this) {
+                this.notifyAll();
+            }
         }
 
         @Override
@@ -34,10 +37,12 @@ class TradeCryptoMarketDataServiceTest {
     @Test
     void RunTradeExSubcription_HappyPath() throws Exception{
         CryptoSubscriberService cryptoSubscriberService = new TradeCryptoMarketDataService();
-        cryptoSubscriberService.injectQuoteObserver(observer);
+        cryptoSubscriberService.injectObserver(observer);
         cryptoSubscriberService.startSubscription("hitbtc","BTC","USD");
 
-        Thread.sleep(1*1000);
+        synchronized (observer) {
+            observer.wait();
+        }
 
         assertThat(tradeList.size()).isGreaterThan(0);
     }

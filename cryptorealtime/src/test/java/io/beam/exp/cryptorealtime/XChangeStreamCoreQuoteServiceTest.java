@@ -1,8 +1,8 @@
 package io.beam.exp.cryptorealtime;
 
 
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

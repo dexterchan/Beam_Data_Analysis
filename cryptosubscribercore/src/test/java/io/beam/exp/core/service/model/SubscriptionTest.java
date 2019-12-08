@@ -3,7 +3,7 @@ package io.beam.exp.core.service.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.beam.exp.core.observe.Observer;
-import model.Quote;
+import io.beam.exp.cryptorealtime.model.Quote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

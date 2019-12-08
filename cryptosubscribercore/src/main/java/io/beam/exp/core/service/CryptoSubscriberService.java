@@ -11,5 +11,5 @@ public interface CryptoSubscriberService<T> {
     public List<Map<String,String>> listSubscription();
     public Map<String, String> getSubscription(String exchange, String baseCcy, String counterCcy);
 
-    public void injectQuoteObserver(Observer<T> observer);
+    public void injectObserver(Observer<T> observer);
 }

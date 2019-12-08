@@ -7,7 +7,7 @@ import io.beam.exp.core.service.model.Subscription;
 import io.beam.exp.cryptorealtime.ExchangeInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
+import io.beam.exp.cryptorealtime.model.Quote;
 
 import java.util.HashSet;
 import java.util.List;
@@ -105,7 +105,7 @@ public class CryptoSubscriberServiceImpl implements  CryptoSubscriberService<Obj
     }
 
     @Override
-    public void injectQuoteObserver(Observer<Object> observer) {
+    public void injectObserver(Observer<Object> observer) {
 
     }
 

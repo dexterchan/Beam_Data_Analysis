@@ -3,8 +3,7 @@ package io.beam.exp.core.observe;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
-import org.junit.jupiter.api.BeforeAll;
+import io.beam.exp.cryptorealtime.model.Quote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

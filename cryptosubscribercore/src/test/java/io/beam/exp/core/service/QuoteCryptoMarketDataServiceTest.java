@@ -3,10 +3,9 @@ package io.beam.exp.core.service;
 import com.google.common.collect.Lists;
 import io.beam.exp.core.observe.Observer;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
+import io.beam.exp.cryptorealtime.model.Quote;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +19,9 @@ class QuoteCryptoMarketDataServiceTest {
         public void update(Quote msg) {
             quoteList.add(msg);
             log.debug(msg.toString());
+            synchronized (this) {
+                this.notifyAll();
+            }
         }
 
         @Override
@@ -36,10 +38,12 @@ class QuoteCryptoMarketDataServiceTest {
     void RunQuoteSubcription_HappyPath() throws Exception{
         CryptoSubscriberService cryptoSubscriberService = new QuoteCryptoMarketDataService();
 
-        cryptoSubscriberService.injectQuoteObserver(observer);
+        cryptoSubscriberService.injectObserver(observer);
         cryptoSubscriberService.startSubscription("hitbtc","BTC","USD");
 
-        Thread.sleep(1*1000);
+        synchronized (observer) {
+            observer.wait();
+        }
 
         assertThat(quoteList.size()).isGreaterThan(0);
         //quoteList.forEach(quote->log.debug(quote.toString()));

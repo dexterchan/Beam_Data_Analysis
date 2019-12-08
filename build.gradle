@@ -33,7 +33,7 @@ ext{
 
 test {
     useJUnitPlatform {
-        //includeTags 'model','controllers'
+        //includeTags 'io.beam.exp.cryptorealtime.model','controllers'
         excludeTags 'integration'
     }
     testLogging.showStandardStreams = true

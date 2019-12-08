@@ -1,7 +1,6 @@
 package io.beam.exp.core.outputStream.bigquery;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
 import com.google.cloud.bigquery.FieldValueList;
@@ -10,15 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.beam.exp.core.observe.Observer;
 import lombok.extern.slf4j.Slf4j;
-import model.Quote;
-import model.TradeEx;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 @Tag("integration")
