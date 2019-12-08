@@ -3,6 +3,7 @@ package io.beam.exp.core.service;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.beam.exp.core.observe.Observer;
+import io.beam.exp.core.observe.Subject;
 import io.beam.exp.core.service.model.Subscription;
 import io.beam.exp.core.service.model.SubscriptionStatus;
 import io.beam.exp.cryptorealtime.ExchangeInterface;
@@ -20,7 +21,7 @@ import java.util.function.Consumer;
 public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscriberService<T> {
 
     private class ExchangeMarketData {
-        Subscription<T> subscription;
+        Subject<T> subject;
         ExchangeInterface exchangeInterface;
     }
 
@@ -62,7 +63,7 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscr
             ExchangeMarketData exchangeMarketData = exchangeMarketDataMap.get(key);
             try {
                 exchangeMarketData.exchangeInterface.unsubscribe();
-                exchangeMarketData.subscription.setSubscriptionStatus(SubscriptionStatus.STOP);
+                //exchangeMarketData.subscription.setSubscriptionStatus(SubscriptionStatus.STOP);
             }catch(Exception ex){
                 log.error(ex.getMessage());
             }
@@ -79,7 +80,7 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscr
         return null;
     }
 
-    abstract void subscribe(ExchangeInterface exchangeInterface, Subscription subscription);
+    abstract void subscribe(ExchangeInterface exchangeInterface, Subject subject);
 
     private void createSubscription(String exchange, String baseCcy, String counterCcy) {
         try {
@@ -88,8 +89,8 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscr
             ExchangeInterface exchangeInterface = XChangeStreamCoreQuoteService.of(exchange, baseCcy, counterCcy);
 
             exchangeMarketData.exchangeInterface = exchangeInterface;
-            exchangeMarketData.subscription = new Subscription(exchange, baseCcy, counterCcy);
-            ;
+            exchangeMarketData.subject = new Subscription(exchange, baseCcy, counterCcy);
+            exchangeMarketData.subject.setActive(true);
 
             if (observerSet.size() == 0) {
                 throw new IllegalStateException("No observer inserted!");
@@ -97,8 +98,8 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscr
 
             observerSet.forEach(
                     observer -> {
-                        subscribe(exchangeInterface, exchangeMarketData.subscription);
-                        exchangeMarketData.subscription.registerObserver(observer);
+                        subscribe(exchangeInterface, exchangeMarketData.subject);
+                        exchangeMarketData.subject.registerObserver(observer);
                     }
             );
 

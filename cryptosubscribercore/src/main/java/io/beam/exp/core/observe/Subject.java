@@ -5,4 +5,6 @@ public interface Subject <T> {
     void removeObserver( Observer<T> o);
     void notifyOservers(T msg);
     void notifyObservers(Throwable ex);
+    void setActive(boolean isActive);
+    boolean isActive();
 }

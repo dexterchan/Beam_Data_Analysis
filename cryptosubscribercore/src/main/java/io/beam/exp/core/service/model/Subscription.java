@@ -19,8 +19,8 @@ public class Subscription <T> implements Subject<T> {
     private  String baseCcy;
     @Getter @Setter
     private  String counterCcy;
-    @Getter @Setter
-    private  boolean TurnOn=true;
+
+    private  boolean active=true;
     @Getter @Setter
     private  SubscriptionStatus subscriptionStatus = SubscriptionStatus.WAIT;
     private Set<Observer> observerSet = new HashSet<>();
@@ -31,10 +31,15 @@ public class Subscription <T> implements Subject<T> {
         this.counterCcy = counterCcy;
     }
 
-    public String getType(){
-        return this.getClass().getName();
+    @Override
+    public void setActive(boolean isActive) {
+        this.active = isActive;
     }
 
+    @Override
+    public boolean isActive() {
+        return this.active;
+    }
 
     @Override
     public void registerObserver( Observer<T> o) {
