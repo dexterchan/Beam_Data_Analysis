@@ -9,6 +9,6 @@ public interface Subject <T> {
     void notifyObservers(Throwable ex);
     void setActive(boolean isActive);
     boolean isActive();
-
+    String getDataName();
     Map<String, String> getDescription();
 }

@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QuoteCryptoMarketDataService extends AbstractCryptoMarketDataService<Quote> {
+
+    QuoteCryptoMarketDataService(){}
+
     @Override
     void subscribe(ExchangeInterface exchangeInterface, Subject subject ) {
         exchangeInterface.subscribeQuote(
@@ -22,5 +25,10 @@ public class QuoteCryptoMarketDataService extends AbstractCryptoMarketDataServic
         }catch(Exception ex){
             log.error(ex.getMessage());
         }
+    }
+
+    @Override
+    String getDataName() {
+        return "QUOTE";
     }
 }

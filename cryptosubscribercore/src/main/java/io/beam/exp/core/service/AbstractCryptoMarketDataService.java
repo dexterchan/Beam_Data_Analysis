@@ -18,9 +18,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarketDataService<T> {
 
+
     private class ExchangeMarketData {
         Subject<T> subject;
         ExchangeInterface exchangeInterface;
+
+        void createSubject(String exchange, String baseCcy, String counterCcy, String dataName){
+            this.subject = new Subscription(exchange, baseCcy, counterCcy, dataName);
+            //exchangeMarketData.subject.
+            this.subject.setActive(true);
+        }
     }
 
     private final Map<String, ExchangeMarketData> exchangeMarketDataMap = Maps.newConcurrentMap();
@@ -85,7 +92,7 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarket
 
     abstract void subscribe(ExchangeInterface exchangeInterface, Subject subject);
     abstract void unsubscribe(ExchangeInterface exchangeInterface, Subject subject);
-
+    abstract String getDataName();
 
     private void createSubscription(String exchange, String baseCcy, String counterCcy) {
         try {
@@ -94,8 +101,7 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarket
             ExchangeInterface exchangeInterface = XChangeStreamCoreQuoteService.of(exchange, baseCcy, counterCcy);
 
             exchangeMarketData.exchangeInterface = exchangeInterface;
-            exchangeMarketData.subject = new Subscription(exchange, baseCcy, counterCcy);
-            exchangeMarketData.subject.setActive(true);
+            exchangeMarketData.createSubject(exchange, baseCcy, counterCcy, getDataName());
 
             if (observerSet.size() == 0) {
                 throw new IllegalStateException("No observer inserted!");

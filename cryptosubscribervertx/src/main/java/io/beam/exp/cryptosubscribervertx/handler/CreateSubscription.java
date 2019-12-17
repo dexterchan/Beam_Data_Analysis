@@ -8,6 +8,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.List;
 import java.util.Map;
 
 public class CreateSubscription implements Handler<RoutingContext> {
@@ -23,7 +24,7 @@ public class CreateSubscription implements Handler<RoutingContext> {
       throw new InvalidInputParameter("Counter CCY not provided");
     }
     CryptoSubscriptionExecutor.startSubscription(baseccy, counterccy);
-    Map<String, String> status = CryptoSubscriptionExecutor.getSubscription(baseccy, counterccy);
+    List<Map<String, String>> status = CryptoSubscriptionExecutor.getSubscription(baseccy, counterccy);
     Gson gson = new Gson();
     String jsonString = gson.toJson(status);
 

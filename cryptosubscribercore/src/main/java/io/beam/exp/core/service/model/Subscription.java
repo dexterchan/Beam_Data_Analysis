@@ -19,17 +19,22 @@ public class Subscription <T> implements Subject<T> {
     private  String baseCcy;
     @Getter @Setter
     private  String counterCcy;
+    @Getter
+    private String dataName;
 
     private  boolean active=true;
     @Getter @Setter
     private  SubscriptionStatus subscriptionStatus = SubscriptionStatus.WAIT;
     private Set<Observer> observerSet = new HashSet<>();
 
-    public Subscription(String exchange, String baseCcy, String counterCcy){
+    public Subscription(String exchange, String baseCcy, String counterCcy, String dataName){
         this.exchange = exchange;
         this.baseCcy = baseCcy;
         this.counterCcy = counterCcy;
+        this.dataName = dataName;
     }
+
+
 
     @Override
     public void setActive(boolean isActive) {

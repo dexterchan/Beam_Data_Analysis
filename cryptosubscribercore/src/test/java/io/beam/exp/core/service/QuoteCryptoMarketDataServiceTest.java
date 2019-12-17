@@ -54,7 +54,7 @@ class QuoteCryptoMarketDataServiceTest {
         Map<String, String> des=cryptoMarketDataService.getSubscription("hitbtc","BTC","USD");
         assertThat(des.size()).isGreaterThan(0);
         assertThat(quoteList.size()).isGreaterThan(0);
-
+        assertThat(des.get("dataName")).isEqualTo("QUOTE");
 
 
     }

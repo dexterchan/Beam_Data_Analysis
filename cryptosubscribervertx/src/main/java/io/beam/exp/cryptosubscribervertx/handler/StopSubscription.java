@@ -8,6 +8,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.List;
 import java.util.Map;
 
 public class StopSubscription implements Handler<RoutingContext> {
@@ -24,7 +25,7 @@ public class StopSubscription implements Handler<RoutingContext> {
     }
     CryptoSubscriptionExecutor.stopSubscription(baseccy, counterccy);
 
-    Map<String, String> status = CryptoSubscriptionExecutor.getSubscription(baseccy, counterccy);
+    List<Map<String, String>> status = CryptoSubscriptionExecutor.getSubscription(baseccy, counterccy);
     Gson gson = new Gson();
     String jsonString = gson.toJson(status);
 

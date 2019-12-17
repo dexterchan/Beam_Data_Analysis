@@ -52,7 +52,7 @@ class SubscriptionTest {
     @Test
     void notifyOservers() throws Exception{
         Exception exception = new Exception("Test exception");
-        Subscription subscription = new Subscription("hitbtc","BTC", "USD");
+        Subscription subscription = new Subscription("hitbtc","BTC", "USD","QUOTE");
         subscription.registerObserver(observer);
         subscription.notifyOservers(quote);
         subscription.notifyObservers(exception);

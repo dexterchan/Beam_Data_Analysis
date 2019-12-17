@@ -1,7 +1,7 @@
 package io.beam.exp.core;
 
 import io.beam.exp.core.factory.AbstractCryptoMarketDataServiceFactory;
-import io.beam.exp.core.factory.GCP_CryptoMarketDataServiceFactory;
+import io.beam.exp.core.service.GCP_CryptoMarketDataServiceFactory;
 import io.beam.exp.core.service.CryptoMarketDataService;
 import io.beam.exp.cryptorealtime.model.Quote;
 import io.beam.exp.cryptorealtime.model.TradeEx;

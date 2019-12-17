@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TradeCryptoMarketDataService extends AbstractCryptoMarketDataService<TradeEx> {
+
+    TradeCryptoMarketDataService(){}
+
     @Override
     void subscribe(ExchangeInterface exchangeInterface, Subject subject) {
         exchangeInterface.subscribeTrade(
@@ -22,5 +25,10 @@ public class TradeCryptoMarketDataService extends AbstractCryptoMarketDataServic
         }catch(Exception ex){
             log.error(ex.getMessage());
         }
+    }
+
+    @Override
+    String getDataName() {
+        return "TRADEEX".toUpperCase();
     }
 }

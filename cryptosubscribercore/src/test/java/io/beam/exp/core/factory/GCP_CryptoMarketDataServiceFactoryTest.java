@@ -3,6 +3,7 @@ package io.beam.exp.core.factory;
 import com.google.common.collect.Lists;
 import io.beam.exp.core.observe.Observer;
 import io.beam.exp.core.service.CryptoMarketDataService;
+import io.beam.exp.core.service.GCP_CryptoMarketDataServiceFactory;
 import io.beam.exp.cryptorealtime.model.Quote;
 import io.beam.exp.cryptorealtime.model.TradeEx;
 import lombok.extern.slf4j.Slf4j;

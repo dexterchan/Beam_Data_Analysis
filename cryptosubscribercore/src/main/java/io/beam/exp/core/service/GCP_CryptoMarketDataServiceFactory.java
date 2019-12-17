@@ -1,5 +1,6 @@
-package io.beam.exp.core.factory;
+package io.beam.exp.core.service;
 
+import io.beam.exp.core.factory.AbstractCryptoMarketDataServiceFactory;
 import io.beam.exp.core.observe.Observer;
 import io.beam.exp.core.outputStream.bigquery.CryptoDataBigQueryOutputStream;
 import io.beam.exp.core.service.CryptoMarketDataService;
