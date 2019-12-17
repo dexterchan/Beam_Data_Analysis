@@ -1,15 +1,15 @@
 package io.beam.exp.core.service.model;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.beam.exp.core.observe.Observer;
 import io.beam.exp.core.observe.Subject;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class Subscription <T> implements Subject<T> {
@@ -73,5 +73,20 @@ public class Subscription <T> implements Subject<T> {
                 o.throwError(ex);
             });
         }
+    }
+
+    @Override
+    public String toString() {
+        Gson g = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd hh:mm:ss.S")
+                .create();
+        return g.toJson(this);
+    }
+
+    @Override
+    public Map<String, String> getDescription() {
+        String json = this.toString();
+        Gson g = new Gson();
+        return  g.fromJson(json, Map.class);
     }
 }

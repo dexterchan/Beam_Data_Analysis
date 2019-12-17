@@ -9,9 +9,11 @@ import io.beam.exp.cryptorealtime.ExchangeInterface;
 import io.beam.exp.cryptorealtime.XChangeStreamCoreQuoteService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarketDataService<T> {
@@ -58,26 +60,32 @@ public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarket
         String key = getExchangeKey(exchange, baseCcy, counterCcy);
         if(exchangeMarketDataMap.containsKey(key)){
             ExchangeMarketData exchangeMarketData = exchangeMarketDataMap.get(key);
-            try {
-                exchangeMarketData.exchangeInterface.unsubscribe();
-                //exchangeMarketData.subscription.setSubscriptionStatus(SubscriptionStatus.STOP);
-            }catch(Exception ex){
-                log.error(ex.getMessage());
-            }
+            this.unsubscribe(exchangeMarketData.exchangeInterface, exchangeMarketData.subject);
+            exchangeMarketDataMap.remove(key);
         }
     }
 
     @Override
     public List<Map<String, String>> listSubscription() {
-        return null;
+        List<Map<String, String>> res = exchangeMarketDataMap.keySet().stream().map(
+                (key)->exchangeMarketDataMap.get(key).subject.getDescription()
+        ).collect(Collectors.toList());
+        return res;
     }
 
     @Override
     public Map<String, String> getSubscription(String exchange, String baseCcy, String counterCcy) {
-        return null;
+        String key = getExchangeKey(exchange, baseCcy, counterCcy);
+        if(exchangeMarketDataMap.containsKey(key)){
+            ExchangeMarketData exchangeMarketData = exchangeMarketDataMap.get(key);
+            return exchangeMarketData.subject.getDescription();
+        }
+        return new HashMap<>();
     }
 
     abstract void subscribe(ExchangeInterface exchangeInterface, Subject subject);
+    abstract void unsubscribe(ExchangeInterface exchangeInterface, Subject subject);
+
 
     private void createSubscription(String exchange, String baseCcy, String counterCcy) {
         try {
