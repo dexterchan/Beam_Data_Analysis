@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: cryptostatistic
-          image: gcr.io/peer2peer/blockchaininfo:v0.1
+          image: gcr.io/peer2peer/blockchaininfo:v0.2
 
           resources:
             requests:

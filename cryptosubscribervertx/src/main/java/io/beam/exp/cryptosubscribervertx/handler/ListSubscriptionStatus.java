@@ -1,10 +1,8 @@
 package io.beam.exp.cryptosubscribervertx.handler;
 
 import com.google.gson.Gson;
-import io.beam.exp.core.service.CryptoSubscriberService;
 import io.beam.exp.cryptosubscribervertx.domain.CryptoSubscriptionExecutor;
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 

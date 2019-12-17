@@ -1,6 +1,8 @@
 package io.beam.exp.cryptosubscribervertx.domain;
 
-import io.beam.exp.core.service.CryptoSubscriberService;
+import io.beam.exp.core.service.CryptoMarketDataService;
+import io.beam.exp.cryptorealtime.model.Quote;
+import io.beam.exp.cryptorealtime.model.TradeEx;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -10,7 +12,9 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class CryptoSubscriptionExecutor {
-  static CryptoSubscriberService cryptoSubscriberService = null;
+  //static CryptoSubscriberService cryptoSubscriberService = null;
+  static CryptoMarketDataService<Quote> quoteCryptoMarketDataService =null;
+  static CryptoMarketDataService<TradeEx> tradeExCryptoMarketDataService =null;
   static ExecutorService executor = Executors.newCachedThreadPool();
 
   static{
@@ -27,22 +31,22 @@ public class CryptoSubscriptionExecutor {
       System.exit(-1);
     }
   }
-  public static CryptoSubscriberService getCryptoSubscriberService(){
-    return cryptoSubscriberService;
-  }
 
   public static void startSubscription(String baseCcy, String counterCcy){
     executor.execute(()->{
-        cryptoSubscriberService.startSubscription("",baseCcy,counterCcy);
+      quoteCryptoMarketDataService.startSubscription("",baseCcy,counterCcy);
+    });
+    executor.execute(()->{
+      tradeExCryptoMarketDataService.startSubscription("",baseCcy,counterCcy);
     });
   }
   public static void stopSubscription(String baseCcy, String counterCcy){
-    cryptoSubscriberService.stopSubscription("", baseCcy, counterCcy);
+    //cryptoSubscriberService.stopSubscription("", baseCcy, counterCcy);
   }
   public static List<Map<String,String>> listSubscription(){
-    return cryptoSubscriberService.listSubscription();
+    return null;
   }
   public static Map<String, String> getSubscription(String baseCcy, String counterCcy){
-    return cryptoSubscriberService.getSubscription("",baseCcy,counterCcy);
+    return null;
   }
 }

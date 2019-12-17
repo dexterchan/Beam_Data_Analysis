@@ -1,19 +1,13 @@
 package io.beam.exp.cryptosubscribervertx;
 
-import com.google.gson.Gson;
-import io.beam.exp.core.service.CryptoSubscriberService;
-import io.beam.exp.cryptosubscribervertx.domain.CryptoSubscriptionExecutor;
-import io.beam.exp.cryptosubscribervertx.exception.InvalidInputParameter;
+import io.beam.exp.core.service.CryptoMarketDataService;
 import io.beam.exp.cryptosubscribervertx.handler.CreateSubscription;
 import io.beam.exp.cryptosubscribervertx.handler.ListSubscriptionStatus;
 import io.beam.exp.cryptosubscribervertx.handler.StopSubscription;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
-
-import java.util.Map;
 
 public class RouterHelper {
 
@@ -65,7 +59,7 @@ public class RouterHelper {
     return router;
   }
 
-  public static Router createTestRouter(Vertx vertx, CryptoSubscriberService cryptoSubscriberService){
+  public static Router createTestRouter(Vertx vertx, CryptoMarketDataService cryptoMarketDataService){
     Router router = Router.router(vertx);
 
     Route route = router.route("/subscription/list");

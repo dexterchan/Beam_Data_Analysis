@@ -29,7 +29,7 @@ public class BlockchainInfoBitconStatusService implements BitcoinStatusInterface
         bitcoinState= new BitcoinState();
         bitCoinStateUpdateMap.put("getdifficulty", (d)-> bitcoinState.setDifficulty(Double.parseDouble(d)));
         bitCoinStateUpdateMap.put("getblockcount", (b)->bitcoinState.setBlockcount(Long.parseLong(b)));
-        bitCoinStateUpdateMap.put("bcperblock", (h)->bitcoinState.setBcperblock(Long.parseLong(h)));
+        //bitCoinStateUpdateMap.put("bcperblock", (h)->bitcoinState.setBcperblock(Long.parseLong(h)));
         bitCoinStateUpdateMap.put("totalbc", (t)->bitcoinState.setTotalbc(Long.parseLong(t)));
         bitCoinStateUpdateMap.put("probability", p->bitcoinState.setProbability(Double.parseDouble(p)));
         bitCoinStateUpdateMap.put("hashestowin", h-> bitcoinState.setHashestowin(Long.parseLong(h)));

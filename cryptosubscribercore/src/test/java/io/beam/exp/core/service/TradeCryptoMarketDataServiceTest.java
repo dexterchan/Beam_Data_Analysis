@@ -36,9 +36,9 @@ class TradeCryptoMarketDataServiceTest {
     };
     @Test
     void RunTradeExSubcription_HappyPath() throws Exception{
-        CryptoSubscriberService cryptoSubscriberService = new TradeCryptoMarketDataService();
-        cryptoSubscriberService.injectObserver(observer);
-        cryptoSubscriberService.startSubscription("hitbtc","BTC","USD");
+        CryptoMarketDataService cryptoMarketDataService = new TradeCryptoMarketDataService();
+        cryptoMarketDataService.injectObserver(observer);
+        cryptoMarketDataService.startSubscription("hitbtc","BTC","USD");
 
         synchronized (observer) {
             observer.wait();

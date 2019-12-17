@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@Tag("integration")
-class CryptoSubscriberServiceImplTest {
+class CryptoMarketDataServiceImplTest {
 
     @Mock
     Observer<TradeEx> tradeExRepository;

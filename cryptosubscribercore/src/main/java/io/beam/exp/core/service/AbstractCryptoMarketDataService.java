@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public abstract class AbstractCryptoMarketDataService<T> implements CryptoSubscriberService<T> {
+public abstract class AbstractCryptoMarketDataService<T> implements CryptoMarketDataService<T> {
 
     private class ExchangeMarketData {
         Subject<T> subject;

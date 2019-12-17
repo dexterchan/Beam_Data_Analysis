@@ -36,10 +36,10 @@ class QuoteCryptoMarketDataServiceTest {
     };
     @Test
     void RunQuoteSubcription_HappyPath() throws Exception{
-        CryptoSubscriberService cryptoSubscriberService = new QuoteCryptoMarketDataService();
+        CryptoMarketDataService cryptoMarketDataService = new QuoteCryptoMarketDataService();
 
-        cryptoSubscriberService.injectObserver(observer);
-        cryptoSubscriberService.startSubscription("hitbtc","BTC","USD");
+        cryptoMarketDataService.injectObserver(observer);
+        cryptoMarketDataService.startSubscription("hitbtc","BTC","USD");
 
         synchronized (observer) {
             observer.wait();
@@ -55,10 +55,10 @@ class QuoteCryptoMarketDataServiceTest {
     }
     @Test
     void RunQuoteSubcriptionWithoutObserver_ThrowException() throws Exception{
-        CryptoSubscriberService cryptoSubscriberService = new QuoteCryptoMarketDataService();
+        CryptoMarketDataService cryptoMarketDataService = new QuoteCryptoMarketDataService();
 
         assertThrows(IllegalStateException.class, ()->{
-            cryptoSubscriberService.startSubscription("hitbtc","BTC","USD");
+            cryptoMarketDataService.startSubscription("hitbtc","BTC","USD");
         });
 
     }

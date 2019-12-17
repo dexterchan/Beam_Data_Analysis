@@ -5,7 +5,7 @@ import io.beam.exp.core.observe.Observer;
 import java.util.List;
 import java.util.Map;
 
-public interface CryptoSubscriberService<T> {
+public interface CryptoMarketDataService<T> {
     public void startSubscription(String exchange, String baseCcy, String counterCcy);
     public void stopSubscription(String exchange, String baseCcy, String counterCcy);
     public List<Map<String,String>> listSubscription();
