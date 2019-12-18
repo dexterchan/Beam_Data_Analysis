@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 public abstract class AsyncObserver<T> implements Observer<T> {
     BlockingQueue asyncQueue = new LinkedBlockingQueue();
     BlockingDeque asyncErrQueue = new LinkedBlockingDeque();
-    ExecutorService executor = Executors.newCachedThreadPool();
+    ExecutorService executor = Executors.newFixedThreadPool(2);
 
     public enum Status{
         START, END

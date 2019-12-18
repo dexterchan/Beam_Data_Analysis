@@ -5,7 +5,9 @@ import io.beam.exp.core.service.GCP_CryptoMarketDataServiceFactory;
 import io.beam.exp.core.service.CryptoMarketDataService;
 import io.beam.exp.cryptorealtime.model.Quote;
 import io.beam.exp.cryptorealtime.model.TradeEx;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Main {
     static String quoteTable = "CryptoQuote";
     static String tradeTable = "CryptoTrade";
@@ -21,10 +23,11 @@ public class Main {
         cryptoSubscriberServiceFactory = new GCP_CryptoMarketDataServiceFactory(quoteTable, tradeTable);
     }
     public static void main(String args[]) throws Exception{
-        String ccy = "ETH";
+        String ccy = "LTC";
         if (args.length>0){
             ccy = args[0];
         }
+        log.info("Market data for {}", ccy);
         CryptoMarketDataService<Quote> quoteCryptoMarketDataService = cryptoSubscriberServiceFactory.createQuoteService();
         quoteCryptoMarketDataService.startSubscription("hitbtc",ccy,"USD");
 

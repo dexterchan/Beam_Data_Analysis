@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 public class CryptoSubscriptionExecutor {
   static CryptoMarketDataService<Quote> quoteCryptoMarketDataService =null;
   static CryptoMarketDataService<TradeEx> tradeExCryptoMarketDataService =null;
-  static ExecutorService executor = Executors.newCachedThreadPool();
+  static ExecutorService executor = Executors.newFixedThreadPool(5);
 
   static String quoteTable = "CryptoQuote";
   static String tradeTable = "CryptoTrade";

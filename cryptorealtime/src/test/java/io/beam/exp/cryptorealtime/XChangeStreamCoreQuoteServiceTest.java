@@ -73,7 +73,7 @@ class XChangeStreamCoreQuoteServiceTest {
 
 
 
-            ExecutorService executor = Executors.newCachedThreadPool();
+            ExecutorService executor = Executors.newFixedThreadPool(5);
             executor.execute(() -> {
                 while ((System.currentTimeMillis() - refTime) < 100 * 5) {
                     try {
