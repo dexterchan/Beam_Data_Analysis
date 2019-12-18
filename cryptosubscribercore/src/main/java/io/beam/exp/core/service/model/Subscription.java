@@ -8,10 +8,11 @@ import io.beam.exp.core.observe.Observer;
 import io.beam.exp.core.observe.Subject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-
+@Slf4j
 public class Subscription <T> implements Subject<T> {
     @Getter @Setter
     private  String exchange;
@@ -90,8 +91,23 @@ public class Subscription <T> implements Subject<T> {
 
     @Override
     public Map<String, String> getDescription() {
-        String json = this.toString();
-        Gson g = new Gson();
-        return  g.fromJson(json, Map.class);
+        log.debug("Get description");
+        Map<String, String> m = new HashMap<>();
+        m.put("dataName", dataName);
+        m.put("baseCcy",this.baseCcy);
+        m.put("counterCcy",this.counterCcy);
+        m.put("active",String.valueOf(this.active));
+
+        StringBuilder sb = new StringBuilder();
+        this.observerSet.forEach(
+                observer -> {
+                    sb.append(observer.getDescription());
+                    sb.append(",");
+                }
+        );
+        m.put("observers", sb.toString());
+
+        log.debug("Get description return");
+        return  m;
     }
 }

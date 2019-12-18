@@ -7,19 +7,28 @@ import io.beam.exp.cryptorealtime.model.Quote;
 import io.beam.exp.cryptorealtime.model.TradeEx;
 
 public class Main {
-    static String quoteTable = "QuoteTest";
-    static String tradeTable = "TradeExTest";
+    static String quoteTable = "CryptoQuote";
+    static String tradeTable = "CryptoTrade";
 
     static AbstractCryptoMarketDataServiceFactory cryptoSubscriberServiceFactory=null;
     static{
+        if (System.getenv("QUOTETABLE") != null) {
+            quoteTable = System.getenv("QUOTETABLE");
+        }
+        if (System.getenv("TRADEEXTABLE") != null) {
+            tradeTable = System.getenv("TRADEEXTABLE");
+        }
         cryptoSubscriberServiceFactory = new GCP_CryptoMarketDataServiceFactory(quoteTable, tradeTable);
     }
     public static void main(String args[]) throws Exception{
-
+        String ccy = "ETH";
+        if (args.length>0){
+            ccy = args[0];
+        }
         CryptoMarketDataService<Quote> quoteCryptoMarketDataService = cryptoSubscriberServiceFactory.createQuoteService();
-        quoteCryptoMarketDataService.startSubscription("hitbtc","BTC","USD");
+        quoteCryptoMarketDataService.startSubscription("hitbtc",ccy,"USD");
 
         CryptoMarketDataService<TradeEx> tradeExCryptoMarketDataService = cryptoSubscriberServiceFactory.createTradeService();
-        tradeExCryptoMarketDataService.startSubscription("hitbtc","BTC","USD");
+        tradeExCryptoMarketDataService.startSubscription("hitbtc",ccy,"USD");
     }
 }

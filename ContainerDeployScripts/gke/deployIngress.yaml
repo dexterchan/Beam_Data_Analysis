@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: fanout-ingress
+  name: cryptomarketdata-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
 
@@ -9,7 +9,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /api/cryptomkt/*
+          - path: /subscription/*
             backend:
               serviceName: cryptosubscribervertx-service
               servicePort: 8888

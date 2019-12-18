@@ -38,7 +38,7 @@ public class GCP_CryptoMarketDataServiceFactory implements AbstractCryptoMarketD
 
             @Override
             public String getDescription() {
-                return "log for Quote";
+                return "System log";
             }
         });
         return cryptoMarketDataService;
@@ -62,7 +62,7 @@ public class GCP_CryptoMarketDataServiceFactory implements AbstractCryptoMarketD
 
             @Override
             public String getDescription() {
-                return "log for TradeEx";
+                return "System log";
             }
         });
         return cryptoMarketDataService;
