@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: cryptostatistic
-          image: gcr.io/peer2peer/cryptosubscribervertx:v0.1
+          image: gcr.io/peer2peer/cryptosubscribervertx:v0.0
 
           resources:
             requests:
@@ -53,6 +53,34 @@ spec:
               memory: "100Mi"
             limits:
               memory: "300Mi"
+          # This setting makes nodes pull the docker image every time before
+          # starting the pod. This is useful when debugging, but should be turned
+          # off in production.
+          imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cryptosubscribercore-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cryptosubscribercore
+  template:
+    metadata:
+      labels:
+        app: cryptosubscribercore
+    spec:
+      containers:
+        - name: cryptostatistic
+          image: gcr.io/peer2peer/cryptosubscribercore:v0.0
+
+          resources:
+            requests:
+              memory: "100Mi"
+            limits:
+              memory: "1000Mi"
           # This setting makes nodes pull the docker image every time before
           # starting the pod. This is useful when debugging, but should be turned
           # off in production.

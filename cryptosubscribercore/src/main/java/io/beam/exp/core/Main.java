@@ -17,6 +17,6 @@ public class Main {
                 new CryptoDataBigQueryOutputStream<TradeEx>(TradeEx.class, TradeTable),
                 new CryptoDataBigQueryOutputStream<Quote>(Quote.class, QuoteTable)
         );
-        cryptoSubscriberService.startSubscription("","BTC","USD");
+        cryptoSubscriberService.startSubscription("","ETH","USD");
     }
 }

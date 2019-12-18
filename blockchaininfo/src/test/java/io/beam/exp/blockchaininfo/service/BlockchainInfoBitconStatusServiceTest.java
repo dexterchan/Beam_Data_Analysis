@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 class BlockchainInfoBitconStatusServiceTest {
 
     @Test
+    @Disabled
     void get() {
         BlockchainInfoBitconStatusService blockchainInfoBitconStatusService = new BlockchainInfoBitconStatusService();
 
